@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!-- saved from url=(0127)https://content.sakai.rutgers.edu/access/content/group/535a3433-a34a-44d5-be53-49ce3fca53ea/Project%20Files/SessionObjects.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta http-equiv="Content-Style-Type" content="text/css"> 
+    <title>SessionObjects.html</title>
+    <link href="./SessionObjects_files/tool_base.css" type="text/css" rel="stylesheet" media="all">
+    <link href="./SessionObjects_files/tool.css" type="text/css" rel="stylesheet" media="all">
+    <script type="text/javascript" src="./SessionObjects_files/headscripts.js"></script>
+<script type="text/javascript" src="./SessionObjects_files/kaltura-upgrade.js"></script>    <style>body { padding: 5px !important; }</style>
+  </head>
+  <body>
+<p><span style="font-size:14px;">In a web application, a web server may be responding to several clients at the same time. <em>Session tracking</em> is a way by which the server can identify the client. Since the HTTP protocol is stateless,&nbsp; the client needs to open a separate connection every time it interacts with the server, and the server treats each request as a new request.</span></p>
+
+<p><span style="font-size:14px;">In order to identify the client, the server needs to maintain the client's state. There are several session tracking techniques. For the purpose of this project we will focus on the Session Object.</span> <span style="font-size:14px;">(Object &lt;--&gt; think Java object, sort of)</span></p>
+
+<h3><span style="color:#008000;"><span style="font-size: 16px;"><strong>Session Object</strong></span></span><span style="font-size:14px;"></span></h3>
+
+<p><span style="font-size:14px;">A Session object is the representation of one user session. A user's Session starts when the user opens a browser and sends the first request to the server. The Session object is available in all the requests (in the entire user session) so attributes stored in the Http session will be available in any jsp (which means in any page of the web application).</span></p>
+
+<p><span style="font-size:14px;">When a session is created, the server generates a unique ID and attaches that ID to the session. The server sends back this ID to the client and from there on, the browser sends back this ID with every request of that user to the server; the&nbsp; server then identifies the client using this.</span></p>
+
+<ul>
+	<li><span style="font-size:14px;"><span style="color: rgb(0, 0, 255);"><strong>How to get/create a Session Object</strong></span></span>
+
+	<ul>
+		<li><span style="font-size:14px;">By calling the getSession() method on the HttpServletRequest object (remember this is an implicitly available object)</span></li>
+		<li><span style="font-family:courier new,courier,monospace;"><span style="font-size: 14px;"><span style="color: rgb(0, 128, 0);"><strong>HttpSession session = request.getSession()</strong></span></span></span></li>
+	</ul>
+	</li>
+	<li><span style="font-size:14px;"><span style="color: rgb(0, 0, 255);"><strong>How to destroy a SessionObject</strong></span></span>
+	<ul>
+		<li><span style="font-size:14px;">This is used to kill the user session, especially used when the end-user logs off. To invalidate the session use:</span></li>
+		<li><span style="font-family:courier new,courier,monospace;"><span style="font-size: 14px;"><span style="color: rgb(0, 128, 0);"><strong>session.invalidate();</strong></span></span></span></li>
+	</ul>
+	</li>
+</ul>
+
+<p><span style="font-size:14px;"><span style="color: rgb(0, 0, 255);"><strong>Other important methods defined for class Session:</strong></span></span></p>
+
+<p style="margin-left: 36pt;"><span style="font-size:14px;"><strong>·<span style="color:#008000;"> <span style="font-family:courier new,courier,monospace;">void setAttribute(String attributeName, Object value)</span></span></strong>- this method is used to store an attribute+value in session. This method takes two arguments- one is the attribute name , and the other is the value.</span></p>
+
+<p style="margin-left: 36pt;"><span style="font-size:14px;">·<strong> <span style="font-family:courier new,courier,monospace;"><span style="color: rgb(0, 128, 0);">Object getAttribute(String attributeName)</span></span></strong><span style="color: rgb(0, 0, 255);"> </span>– this method is used to get the value stored in a session under the attribute name. Remember the return type is Object. That means you can store any type of object in the session.</span></p>
+
+<p style="margin-left: 36pt;"><span style="font-size:14px;"><strong>· <span style="color:#008000;">void removeAttribute(String attributeName)</span></strong>- this method is used to remove the attribute from session.</span></p>
+
+<p style="margin-left: 36pt;"><span style="font-size:14px;"><strong>· <span style="color:#008000;">public boolean isNew()</span></strong><span style="color: rgb(0, 0, 255);">-</span> This method returns true if server does not find any state of the client.</span></p>
+
+<p><span style="font-size:14px;"><em>Note: Browser session and server sessions are different. Browser session is client session which starts when you open the browser and gets destroyed when closing the browser, whereas the server session is maintained at the server end.</em></span></p>
+
+<p><span style="font-size:14px;"><u><strong>EXAMPLE</strong></u><br>
+<strong>-Create a user session when the user logs in and invalidate the session when the user logs out.</strong></span><br>
+<br>
+Steps:<br>
+a) create a login.jsp to grab username and password of user.<br>
+b) checkLoginDetails.jsp which will check the username and password are correct. If they are correct it will store the username in session and redirect to success.jsp.<br>
+c) success.jsp will print the username of the user stored in the session.<br>
+d) logout.jsp will call session.invalidate() to kill the server session.<br>
+e) will try to access session object after invalidate which will throw an error.<br>
+<br>
+<br>
+a) login.jsp</p>
+
+<div class="container">
+<div class="line number1 index0 alt2"><code class="as3 plain">&lt;!DOCTYPE html&gt; </code></div>
+
+<div class="line number2 index1 alt1"><code class="as3 plain">&lt;html&gt; </code></div>
+
+<div class="line number3 index2 alt2"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">&lt;head&gt; </code></div>
+
+<div class="line number4 index3 alt1"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">&lt;title&gt;Login Form&lt;/title&gt; </code></div>
+
+<div class="line number5 index4 alt2"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">&lt;/head&gt; </code></div>
+
+<div class="line number6 index5 alt1"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">&lt;body&gt; </code></div>
+
+<div class="line number7 index6 alt2"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">&lt;form</code> <code class="as3 plain">action=</code><code class="as3 string">"<span style="color:#006400;">displayLoginDetails.jsp</span>"</code> <code class="as3 plain">method=</code><code class="as3 string">"<span style="color:#008000;">POST</span>"</code><code class="as3 plain">&gt; </code></div>
+
+<div class="line number8 index7 alt1"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">Username: &lt;input type=</code><code class="as3 string">"<span style="color:#006400;">text</span>"</code> <code class="as3 plain">name=</code><code class="as3 string">"<span style="color:#006400;">username</span>"</code><code class="as3 plain">/&gt; &lt;br/&gt; </code></div>
+
+<div class="line number9 index8 alt2"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">Password:&lt;input type=</code><code class="as3 string">"<span style="color:#006400;">password</span>"</code> <code class="as3 plain">name=</code><code class="as3 string">"<span style="color:#006400;">password</span>"</code><code class="as3 plain">/&gt; &lt;br/&gt; </code></div>
+
+<div class="line number10 index9 alt1"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">&lt;input type=</code><code class="as3 string">"<span style="color:#008000;">submit</span>"</code> <code class="as3 plain">value=</code><code class="as3 string">"<span style="color:#006400;">Submit</span>"</code><code class="as3 plain">/&gt; </code></div>
+
+<div class="line number11 index10 alt2"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">&lt;/form&gt; </code></div>
+
+<div class="line number12 index11 alt1"><code class="as3 spaces">&nbsp;&nbsp;&nbsp;</code><code class="as3 plain">&lt;/body&gt; </code></div>
+
+<div class="line number13 index12 alt2"><code class="as3 plain">&lt;/html&gt;</code><br>
+<br>
+b) checkLoginDetails.jsp
+<div class="container">
+<div class="line number1 index0 alt2">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="xml plain">&lt;%@ page import ="java.sql.*" %&gt;</code></div>
+
+<div class="line number2 index1 alt1"><code class="xml plain">&lt;%</code></div>
+
+<div class="line number3 index2 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">String userid = request.getParameter("</code><code class="as3 string"><span style="color:#006400;">username</span></code><code class="xml plain">");&nbsp;&nbsp;&nbsp; </code></div>
+
+<div class="line number4 index3 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">String pwd = request.getParameter("</code><code class="as3 string"><span style="color:#006400;">password</span></code><code class="xml plain">");</code></div>
+
+<div class="line number5 index4 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">Class.forName("com.mysql.jdbc.Driver");</code></div>
+
+<div class="line number7 index6 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">Connection con = DriverManager.getConnection("jdbc:<a href="mysql://localhost:3306/dbname">mysql://localhost:3306/dbname</a>",</code><code class="xml plain">"root", "dbpass");</code></div>
+
+<div class="line number8 index7 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">Statement st = con.createStatement();</code></div>
+
+<div class="line number9 index8 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">ResultSet rs;</code></div>
+
+<div class="line number10 index9 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">rs = st.executeQuery("select * from users where </code><code class="as3 string"><span style="color:#006400;">username</span></code><code class="xml plain">='" + userid + "' and </code><code class="as3 string"><span style="color:#006400;">password</span></code><code class="xml plain">='" + pwd + "'");</code></div>
+
+<div class="line number11 index10 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">if (rs.next()) {</code></div>
+
+<div class="line number12 index11 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><strong><code class="xml plain">session.setAttribute("<span style="color:#800080;">user</span>", userid); // the username will be stored in the session</code></strong></div>
+
+<div class="line number13 index12 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="xml plain">out.println("welcome " + userid);</code></div>
+
+<div class="line number14 index13 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </code><code class="xml plain">out.println("&lt;</code><code class="xml keyword">a</code> <code class="xml color1">href</code><code class="xml plain">=</code><code class="xml string">'logout.jsp'</code><code class="xml plain">&gt;Log out&lt;/</code><code class="xml keyword">a</code><code class="xml plain">&gt;");</code></div>
+
+<div class="line number15 index14 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">response.sendRedirect("success.jsp");</code></div>
+
+<div class="line number16 index15 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">} else {</code></div>
+
+<div class="line number17 index16 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">out.println("Invalid password &lt;</code><code class="xml keyword">a</code> <code class="xml color1">href</code><code class="xml plain">=</code><code class="xml string">'login.jsp'</code><code class="xml plain">&gt;try again&lt;/</code><code class="xml keyword">a</code><code class="xml plain">&gt;");</code></div>
+
+<div class="line number18 index17 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">}</code></div>
+
+<div class="line number19 index18 alt2"><code class="xml plain">%&gt;</code></div>
+</div>
+</div>
+
+<div class="line number16 index15 alt1">c) success.jsp
+<div class="container">
+<div class="line number1 index0 alt2"><code class="xml plain">&lt;%</code></div>
+
+<div class="line number2 index1 alt1"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">if (<strong>(session.getAttribute("<span style="color:#800080;">user</span>")</strong> == null)) {</code></div>
+
+<div class="line number3 index2 alt2"><code class="xml plain">%&gt;</code></div>
+
+<div class="line number4 index3 alt1"><code class="xml plain">You are not logged in&lt;</code><code class="xml keyword">br</code><code class="xml plain">/&gt;</code></div>
+
+<div class="line number5 index4 alt2"><code class="xml plain">&lt;</code><code class="xml keyword">a</code> <code class="xml color1">href</code><code class="xml plain">=</code><code class="xml string">"login.jsp"</code><code class="xml plain">&gt;<span style="color:#008000;">Please Login</span>&lt;/</code><code class="xml keyword">a</code><code class="xml plain">&gt;</code></div>
+
+<div class="line number6 index5 alt1"><code class="xml plain">&lt;%} else {</code></div>
+
+<div class="line number7 index6 alt2"><code class="xml plain">%&gt;</code></div>
+
+<div class="line number8 index7 alt1"><code class="xml plain"><span style="color:#008000;">Welcome</span> &lt;%=<strong>session.getAttribute("<span style="color:#800080;">user</span>")</strong>%&gt;&nbsp; //this will display the username that is stored in the session.</code></div>
+
+<div class="line number9 index8 alt2"><code class="xml plain">&lt;</code><code class="xml keyword">a</code> <code class="xml color1">href</code><code class="xml plain">=</code><code class="xml string">'logout.jsp'</code><code class="xml plain">&gt;<span style="color:#008000;">Log out</span>&lt;/</code><code class="xml keyword">a</code><code class="xml plain">&gt;</code></div>
+
+<div class="line number10 index9 alt1"><code class="xml plain">&lt;%</code></div>
+
+<div class="line number11 index10 alt2"><code class="xml spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="xml plain">}</code></div>
+
+<div class="line number12 index11 alt1"><code class="xml plain">%&gt;</code></div>
+</div>
+</div>
+</div>
+<span style="font-size:14px;">d) logout.jsp</span></div>
+</div>
+
+<div class="container">
+<div class="line number1 index0 alt2"><code class="xml plain">&lt;%</code></div>
+
+<div class="line number3 index2 alt2"><strong><code class="xml plain">session.invalidate();</code></strong><br>
+<code class="as3 plain">session.getAttribute(</code><code class="as3 string">"user"</code><code class="as3 plain">); &nbsp; //this will throw an error</code></div>
+
+<div class="line number4 index3 alt1"><strong><code class="xml plain">response.sendRedirect("login.jsp");</code></strong><br>
+&nbsp;</div>
+
+<div class="line number5 index4 alt2"><code class="xml plain">%&gt;</code></div>
+</div>
+
+<div class="container">
+<div class="line number12 index11 alt1">&nbsp;</div>
+</div>
+
+<p><span style="font-size:14px;"></span><br>
+&nbsp;</p>
+
+  
+
+</body></html>
