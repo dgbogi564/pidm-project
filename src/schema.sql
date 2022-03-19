@@ -10,12 +10,14 @@ CREATE TABLE Bidder
 (
     upperLimit integer NOT NULL,
     userId     integer NOT NULL,
+    PRIMARY KEY (userId),
     FOREIGN KEY (userId) REFERENCES User (userId)
 );
 
 CREATE TABLE Seller
 (
     userId integer NOT NULL,
+    PRIMARY KEY (userId),
     FOREIGN KEY (userId) REFERENCES User (userId)
 );
 
@@ -32,12 +34,14 @@ CREATE TABLE DigitalBook
 (
     fileSize integer     NOT NULL,
     ISBN     varchar(13) NOT NULL,
+    PRIMARY KEY (ISBN),
     FOREIGN KEY (ISBN) REFERENCES Book (ISBN)
 );
 
 CREATE TABLE PhysicalBook
 (
     ISBN varchar(13) NOT NULL,
+    primary key (ISBN),
     FOREIGN KEY (ISBN) REFERENCES Book (ISBN)
 );
 
@@ -55,6 +59,7 @@ CREATE TABLE Auction
     minPrice     integer      NOT NULL,
     name         varchar(128) NOT NULL,
     sellerId     integer      NOT NULL,
+    PRIMARY KEY (auctionId),
     CHECK ((isDigital = TRUE AND "condition" IS NOT NULL) OR (isDigital = FALSE AND "condition" IS NULL)),
     FOREIGN KEY (sellerId) REFERENCES Seller (userId)
 );
@@ -65,6 +70,6 @@ CREATE TABLE Bid
     auctionId integer  NOT NULL REFERENCES Auction (auctionId),
     bidderId  integer  NOT NULL,
     time      datetime NOT NULL,
-    PRIMARY KEY (time),
+    PRIMARY KEY(time, bidderId, auctionId),
     FOREIGN KEY (bidderId) REFERENCES User (userId)
 );
