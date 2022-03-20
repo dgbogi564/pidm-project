@@ -48,7 +48,7 @@ CREATE TABLE PhysicalBook
 CREATE TABLE Auction
 (
     auctionId    integer      NOT NULL,
-    "condition"  varchar(128),
+    `condition`  varchar(128),
     description  varchar(128),
     expiration   datetime     NOT NULL,
     highestBid   integer,
@@ -67,9 +67,10 @@ CREATE TABLE Auction
 CREATE TABLE Bid
 (
     amount    integer  NOT NULL,
-    auctionId integer  NOT NULL REFERENCES Auction (auctionId),
+    auctionId integer  NOT NULL,
     bidderId  integer  NOT NULL,
     time      datetime NOT NULL,
-    PRIMARY KEY(time, bidderId, auctionId),
-    FOREIGN KEY (bidderId) REFERENCES User (userId)
+    PRIMARY KEY (time, bidderId),
+    FOREIGN KEY (bidderId) REFERENCES User (userId),
+    FOREIGN KEY (auctionId) REFERENCES Auction (auctionId)
 );
