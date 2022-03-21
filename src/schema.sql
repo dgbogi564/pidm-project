@@ -6,71 +6,108 @@ CREATE TABLE User
     PRIMARY KEY (userId)
 );
 
-CREATE TABLE Bidder
-(
-    upperLimit integer NOT NULL,
-    userId     integer NOT NULL,
-    PRIMARY KEY (userId),
-    FOREIGN KEY (userId) REFERENCES User (userId)
-);
-
-CREATE TABLE Seller
+CREATE TABLE Admin
 (
     userId integer NOT NULL,
     PRIMARY KEY (userId),
     FOREIGN KEY (userId) REFERENCES User (userId)
 );
 
-CREATE TABLE Book
+CREATE TABLE Representative
 (
-    author          varchar(128) NOT NULL,
-    publicationDate date         NOT NULL,
-    title           varchar(128) NOT NULL,
-    ISBN            varchar(13)  NOT NULL,
-    PRIMARY KEY (ISBN)
+    userId integer NOT NULL,
+    PRIMARY KEY (userId),
+    FOREIGN KEY (userId) REFERENCES User (userId)
 );
 
-CREATE TABLE DigitalBook
+CREATE TABLE Regular
 (
-    fileSize integer     NOT NULL,
-    ISBN     varchar(13) NOT NULL,
-    PRIMARY KEY (ISBN),
-    FOREIGN KEY (ISBN) REFERENCES Book (ISBN)
+    userId integer NOT NULL,
+    PRIMARY KEY (userId),
+    FOREIGN KEY (userId) REFERENCES User (userId)
 );
 
-CREATE TABLE PhysicalBook
+CREATE TABLE Clothes
 (
-    ISBN varchar(13) NOT NULL,
-    primary key (ISBN),
-    FOREIGN KEY (ISBN) REFERENCES Book (ISBN)
+    name         varchar(128) NOT NULL,
+    manufacturer varchar(128) NOT NULL,
+    color        varchar(128) NOT NULL,
+    `condition`  varchar(128) NOT NULL,
+    quantity     integer      NOT NULL,
+    itemId       varchar(13)  NOT NULL,
+    PRIMARY KEY (itemId)
+);
+
+CREATE TABLE Shirts
+(
+    armLength  float       NOT NULL,
+    collarSize float       NOT NULL,
+    waistSize  float       NOT NULL,
+    itemId     varchar(13) NOT NULL,
+    PRIMARY KEY (itemId),
+    FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
+);
+
+CREATE TABLE Pants
+(
+    width  float       NOT NULL,
+    length float       NOT NULL,
+    itemId varchar(13) NOT NULL,
+    primary key (itemId),
+    FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
+);
+
+CREATE TABLE Shoes
+(
+    size   float       NOT NULL,
+    itemId varchar(13) NOT NULL,
+    primary key (itemId),
+    FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
 );
 
 CREATE TABLE Auction
 (
-    auctionId    integer      NOT NULL,
-    `condition`  varchar(128),
+    title        varchar(128) NOT NULL,
     description  varchar(128),
+    itemId       varchar(13) REFERENCES Clothes (itemId),
     expiration   datetime     NOT NULL,
-    highestBid   integer,
-    increment    integer      NOT NULL,
-    initialPrice integer      NOT NULL,
-    isDigital    bool         NOT NULL,
-    item         varchar(13) REFERENCES Book (ISBN),
-    minPrice     integer      NOT NULL,
-    name         varchar(128) NOT NULL,
+    initialPrice float        NOT NULL,
+    minPrice     float        NOT NULL,
+    increment    float        NOT NULL,
+    highestBid   float,
+    auctionId    integer      NOT NULL,
     sellerId     integer      NOT NULL,
     PRIMARY KEY (auctionId),
-    CHECK ((isDigital = TRUE AND "condition" IS NOT NULL) OR (isDigital = FALSE AND "condition" IS NULL)),
     FOREIGN KEY (sellerId) REFERENCES Seller (userId)
 );
 
 CREATE TABLE Bid
 (
     amount    integer  NOT NULL,
+    time      datetime NOT NULL,
+    anonymous bool     NOT NULL,
     auctionId integer  NOT NULL,
     bidderId  integer  NOT NULL,
-    time      datetime NOT NULL,
     PRIMARY KEY (time, bidderId),
     FOREIGN KEY (bidderId) REFERENCES User (userId),
     FOREIGN KEY (auctionId) REFERENCES Auction (auctionId)
+);
+
+CREATE TABLE Participates
+(
+    upperLimit integer NOT NULL,
+    userId     integer NOT NULL,
+    auctionId  integer NOT NULL,
+    PRIMARY KEY (userId, auctionId),
+    FOREIGN KEY (userId) REFERENCES User (userId),
+    FOREIGN KEY (auctionId) REFERENCES Auction (auctionId)
+);
+
+CREATE TABLE Alert
+(
+    userId integer NOT NULL,
+    itemId integer NOT NULL,
+    PRIMARY KEY (userId, itemId),
+    FOREIGN KEY (userId) REFERENCES User (userId),
+    FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
 );
