@@ -33,35 +33,34 @@ CREATE TABLE Clothes
     manufacturer varchar(128) NOT NULL,
     color        varchar(128) NOT NULL,
     `condition`  varchar(128) NOT NULL,
-    quantity     integer      NOT NULL,
-    itemId       varchar(13)  NOT NULL,
+    itemId       integer      NOT NULL,
     PRIMARY KEY (itemId)
 );
 
 CREATE TABLE Shirts
 (
-    armLength  float       NOT NULL,
-    collarSize float       NOT NULL,
-    waistSize  float       NOT NULL,
-    itemId     varchar(13) NOT NULL,
+    armLength  float   NOT NULL,
+    collarSize float   NOT NULL,
+    waistSize  float   NOT NULL,
+    itemId     integer NOT NULL,
     PRIMARY KEY (itemId),
     FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
 );
 
 CREATE TABLE Pants
 (
-    width  float       NOT NULL,
-    length float       NOT NULL,
-    itemId varchar(13) NOT NULL,
-    primary key (itemId),
+    width  float   NOT NULL,
+    length float   NOT NULL,
+    itemId integer NOT NULL,
+    PRIMARY KEY (itemId),
     FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
 );
 
 CREATE TABLE Shoes
 (
-    size   float       NOT NULL,
-    itemId varchar(13) NOT NULL,
-    primary key (itemId),
+    size   float   NOT NULL,
+    itemId integer NOT NULL,
+    PRIMARY KEY (itemId),
     FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
 );
 
@@ -69,7 +68,8 @@ CREATE TABLE Auction
 (
     title        varchar(128) NOT NULL,
     description  varchar(128),
-    itemId       varchar(13) REFERENCES Clothes (itemId),
+    itemId       integer      NOT NULL REFERENCES Clothes (itemId),
+    quantity     integer      NOT NULL,
     expiration   datetime     NOT NULL,
     initialPrice float        NOT NULL,
     minPrice     float        NOT NULL,
@@ -88,14 +88,14 @@ CREATE TABLE Bid
     anonymous bool     NOT NULL,
     auctionId integer  NOT NULL,
     bidderId  integer  NOT NULL,
-    PRIMARY KEY (time, bidderId),
+    PRIMARY KEY (amount, bidderId),
     FOREIGN KEY (bidderId) REFERENCES User (userId),
     FOREIGN KEY (auctionId) REFERENCES Auction (auctionId)
 );
 
 CREATE TABLE Participates
 (
-    upperLimit integer NOT NULL,
+    upperLimit float   NOT NULL,
     userId     integer NOT NULL,
     auctionId  integer NOT NULL,
     PRIMARY KEY (userId, auctionId),
