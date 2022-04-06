@@ -1,3 +1,6 @@
+CREATE DATABASE  IF NOT EXISTS `BuyMe`;
+USE `BuyMe`;
+
 CREATE TABLE User
 (
     name     varchar(32)  NOT NULL,
