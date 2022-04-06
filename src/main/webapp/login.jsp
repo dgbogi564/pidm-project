@@ -46,6 +46,7 @@
 
 			//request.setAttribute("username", username);
 			//request.setAttribute("userId", userId);
+			response.sendRedirect("profile_page.jsp");
 			out.print("Login successful.");
 			//TimeUnit.SECONDS.sleep(3);
 			//request.getServletContext().getRequestDispatcher("login.jsp").forward(request, response);
