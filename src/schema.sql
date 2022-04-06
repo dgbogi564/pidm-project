@@ -78,7 +78,7 @@ CREATE TABLE Auction
     auctionId    integer      NOT NULL,
     sellerId     integer      NOT NULL,
     PRIMARY KEY (auctionId),
-    FOREIGN KEY (sellerId) REFERENCES Seller (userId)
+    FOREIGN KEY (sellerId) REFERENCES Regular (userId)
 );
 
 CREATE TABLE Bid
