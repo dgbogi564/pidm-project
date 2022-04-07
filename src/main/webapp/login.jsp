@@ -28,26 +28,28 @@
 
 
 			//Get userId
-			String getUserInfo = "SELECT * FROM User WHERE name = " + "\'" + username + "\'";
+			String getUserInfo = "SELECT * FROM User WHERE name = " + "\'" + username + "\'" + " and password = '" + password + "'";
 			ResultSet result = stmt.executeQuery(getUserInfo);
 			int userId;
 			if (result.next()) {
 				userId = Integer.parseInt(result.getString("userId"));
+				session.setAttribute("USER", userId);
+				out.print("Login successful.");
+				response.sendRedirect("profile_page.jsp");
 			} else {
 				throw new Exception("User does not exist.");
 			}
 			
-			if (!result.getString("password").equals(password)) {
+/* 			if (!result.getString("password").equals(password)) {
 				throw new Exception("Incorrect password.");
-			}
+			} */
 
 			//Close the connection. Don't forget to do it, otherwise you're keeping the resources of the server allocated.
 			con.close();
 
 			//request.setAttribute("username", username);
 			//request.setAttribute("userId", userId);
-			response.sendRedirect("profile_page.jsp");
-			out.print("Login successful.");
+			
 			//TimeUnit.SECONDS.sleep(3);
 			//request.getServletContext().getRequestDispatcher("login.jsp").forward(request, response);
 

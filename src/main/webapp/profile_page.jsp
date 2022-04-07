@@ -12,6 +12,19 @@
 	</head>
 	<body>
 		<h1>Welcome to your Profile page</h1>
+		
+		<form method="get" action="deleteAccount.jsp">
+			<table> 
+				<tr>
+					<td><label>Delete user account?</label></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="Confirm"></td> 
+				</tr>				
+			</table>
+		</form> 
+		<br>
+		
 		<button><a href='logout.jsp'>Log out</a></button>
 
 	</body>
