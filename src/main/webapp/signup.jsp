@@ -36,10 +36,14 @@
 				}
 
 				//Get userId
-				String GetUserCount = "SELECT COUNT(*) FROM user";
-				result = stmt.executeQuery(GetUserCount);
-				result.next();
-				int userId = Integer.parseInt(result.getString("COUNT(*)")) + 1;
+				int userId;
+				String GetLastUserId = "SELECT userId FROM user ORDER BY userId DESC LIMIT 1";
+				result = stmt.executeQuery(GetLastUserId);
+				if(result.next()) {
+					userId = Integer.parseInt(result.getString("userId")) + 1;
+				} else {
+					userId = 1;
+				}
 
 				//Make an insert statement for the User table:
 				String insert = "INSERT INTO User(name, password, userId)"
@@ -53,14 +57,18 @@
 				ps.setFloat(3, userId);
 				//Run the query against the DB
 				ps.executeUpdate();
-
+				
 				//Close the connection. Don't forget to do it, otherwise you're keeping the resources of the server allocated.
 				con.close();
+				
+				//Update cookies
+				session.setAttribute("userId", userId);
+				session.setAttribute("name", username);
 
 				out.print("Signup completed.");
-				out.print("<form method=\"post\" action=\"signup_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to signup page\" />\n\t\t</form>");
-				//TimeUnit.SECONDS.sleep(3);
-				//response.sendRedirect("login.jsp");
+				out.print("<br>");
+				out.print("<br>");
+				out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go to profile\" />\n\t\t</form>");
 
 			} catch (Exception ex) {
 				if (con != null) {
@@ -69,6 +77,7 @@
 				out.print(ex);
 				out.print("<br>");
 				out.print("Signup failed.");
+				out.print("<br>");
 				out.print("<br>");
 				out.print("<form method=\"post\" action=\"signup_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to signup page\" />\n\t\t</form>");
 			}
