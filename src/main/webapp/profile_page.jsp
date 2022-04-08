@@ -14,7 +14,7 @@
 	<body>
 		<%
 			String name = (String) session.getAttribute("name"); 
-			out.print("<h1>Welcome, " + name + "</h1>");
+			out.print("<h1>Welcome, " + name + ".</h1>");
 		%>
 		
 		<form method="get" action="deleteAccount.jsp">
