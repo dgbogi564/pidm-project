@@ -16,16 +16,13 @@
 		<form method="get" action="deleteAccount.jsp">
 			<table> 
 				<tr>
-					<td><label>Delete user account?</label></td>
-				</tr>
-				<tr>
-					<td><input type="submit" value="Confirm"></td> 
+					<td><input type="submit" value="Delete account"></td> 
 				</tr>				
 			</table>
 		</form> 
 		<br>
-		
-		<button><a href='logout.jsp'>Log out</a></button>
-
+		<form method="post" action="login_page.jsp">
+			<input type="submit" value="Logout" />
+		</form>
 	</body>
 </html>
