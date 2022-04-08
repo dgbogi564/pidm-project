@@ -39,6 +39,8 @@
 			out.print(ex);
 			out.print("<br>");
 			out.print("Delete failed.");
+			out.print("<br>");
+			out.print("<form method=\"post\" action=\"login_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to login page\" />\n\t\t</form>");
 		}
 	%>
 </body>

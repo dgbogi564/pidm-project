@@ -68,8 +68,8 @@
 				out.print(ex);
 				out.print("<br>");
 				out.print("Signup failed.");
-				//TimeUnit.SECONDS.sleep(3);
-				//response.sendRedirect("signup.jsp");
+				out.print("<br>");
+				out.print("<form method=\"post\" action=\"signup_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to signup page\" />\n\t\t</form>");
 			}
 		%>
 	</body>

@@ -60,8 +60,8 @@
 			out.print(ex);
 			out.print("<br>");
 			out.print("Login failed.");
-			//TimeUnit.SECONDS.sleep(3);
-			//response.sendRedirect("login.jsp");
+			out.print("<br>");
+			out.print("<form method=\"post\" action=\"login_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to login page\" />\n\t\t</form>");
 		}
 	%>
 </body>
