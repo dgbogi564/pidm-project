@@ -20,7 +20,7 @@
 			//Create a SQL statement
 			Statement stmt = con.createStatement();
 
-			//Get parameters from the HTML form at the profile_page.jsp
+			//Get attribute USER from session that we set in login.jsp
 			Integer userID = (Integer)session.getAttribute("USER");
 
 			//Get userId & execute query
