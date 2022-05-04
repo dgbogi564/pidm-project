@@ -13,10 +13,10 @@
 	<body>
 		<%
 			String name = (String) session.getAttribute("name"); 
-			out.print("<h1>Welcome, " + name + ".</h1>");
+			out.print("<h1>Welcome, " + name + " to the Auction Site.</h1>");
 		%>
 		
-		<form method="get" action="">
+		<form method="get" action="sell_item.jsp">
 			<h2>Auction an item</h2>
 			<input type="submit" value="Add item">
 		</form>
@@ -26,12 +26,23 @@
 			<h2>Search for item</h2>
 			<input type="submit" value="Filter">
 		</form>
+		<br>
+		<hr>
+		<form method="post" action="profile_page.jsp">
+			<h2>Profile Page</h2>
+			<input type="submit" value="Go back" />
+		</form>
+		<br>		
+		<hr>
 		
 		<fieldset>
 			<legend>Auctions</legend>
 			<table>
 				<tr>
-					<td>placeholder...</td>
+					<td>Item Name</td>
+					<td>Owner</td>
+					<td>Highest Bid</td>
+					<td>ID</td>
 				</tr>
 			</table>
 		</fieldset>
