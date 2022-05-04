@@ -9,6 +9,15 @@
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>auction page</title>
+	<style>
+		table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+		table {
+			width: 100%;
+		}
+	</style>	
 	</head>
 	<body>
 		<%
@@ -16,13 +25,13 @@
 			out.print("<h1>Welcome, " + name + " to the Auction Site.</h1>");
 		%>
 		
-		<form method="get" action="sell_item.jsp">
+		<form method="post" action="sell_page.jsp">
 			<h2>Auction an item</h2>
 			<input type="submit" value="Add item">
 		</form>
 		<br> 
 		<hr>
-		<form method="get" action="">
+		<form method="post" action="">
 			<h2>Search for item</h2>
 			<input type="submit" value="Filter">
 		</form>
@@ -39,10 +48,14 @@
 			<legend>Auctions</legend>
 			<table>
 				<tr>
-					<td>Item Name</td>
-					<td>Owner</td>
-					<td>Highest Bid</td>
-					<td>ID</td>
+					<th>Name</th>
+					<th>Item ID</th>
+					<th>Color</th>
+					<th>Condition</th>
+					<th>Manufacturer</th>
+					<th>Highest Bid</th>
+	
+					<th>Place Bid!</th>
 				</tr>
 			</table>
 		</fieldset>
