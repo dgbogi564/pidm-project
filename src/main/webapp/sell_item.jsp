@@ -22,10 +22,23 @@
 			Statement stmt = con.createStatement();
 
 			//Get parameters from the HTML form at the sell_page.jsp
-			String username = request.getParameter("itemName");
-			String password = request.getParameter("color");
-			String password = request.getParameter("condition");	
-			String password = request.getParameter("manufacturer");	
+			/* TABLE Clothes */
+			String itemName = request.getParameter("itemName");
+			String color = request.getParameter("color");
+			String condition = request.getParameter("condition");	
+			String manufacturer = request.getParameter("manufacturer");	
+			/* TABLE Shirts/Pants/Shoes */
+			String clothType = request.getParameter("clothesType");	
+			/* TABLE Auction */
+			String clothType = request.getParameter("expirDate");	
+			String clothType = request.getParameter("expirTime");	
+			String clothType = request.getParameter("initPrice");	
+			String clothType = request.getParameter("miniPrice");	
+			String clothType = request.getParameter("clothesType");	
+			String clothType = request.getParameter("increment");	
+			String clothType = request.getParameter("clothesType");	
+			String clothType = request.getParameter("clothesType");	
+			
 			
 			/*  TO DO: get info and store it into clothes and isA tables....info to be used for auction */
 			

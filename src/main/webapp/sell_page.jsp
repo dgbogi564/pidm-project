@@ -13,6 +13,10 @@
 			table {
 				border-collapse: separate; 
 				border-spacing: 1em 2em;
+				border: 1px solid black;
+			}
+			#submit {
+				border: none;
 			}
 			input {
 				margin: 10px;
@@ -47,13 +51,44 @@
 				<option value="pants">Pants</option>
 				<option value="shoes">Shoes</option>
 			</select>	
-			
 			<!-- we will use template to put info here -->
 			<p id="templateHolder">
 			</p>
-						
+			
+			<hr>
+			<table>
+				<h3>Duration of Auction:</h3>
+				<tr>
+					<td>Expiration Date (mm/dd/yyyy): </td>
+					<td><input type="text" name="expirDate"></td>							
+				</tr>	
+				<tr>
+					<td>Time: </td>		
+					<td><input type="time" name="expirTime" min="00:00" max="24:00" required></td>
+				</tr>								
+			</table>
 			
 			<table>
+				<h3>Set Price:</h3>
+				<tr>
+					<td> Initial Price ($USD) </td>
+					<td><input type="text" name="initPrice"></td>		
+				</tr>
+				<tr>
+					<td> Hidden Minimum Price ($USD) </td>
+					<td><input type="text" name="miniPrice"></td>		
+				</tr>										
+			</table>
+			
+			<table>
+				<h3>Auction Increment:</h3>
+				<tr>
+					<td> Increment Amount ($USD): </td>
+					<td><input type="text" name="increment"></td>		
+				</tr>				
+			</table>
+				
+			<table id="submit">
 				<tr>
 					<td><input type="submit" value="Submit"></td>
 					<td><input type="submit" formaction="auction_page.jsp" formmethod="POST" value="Cancel"></td>
@@ -66,11 +101,11 @@
 		<template id="tempShirts">
 			<table>
 				<tr>
-					<td>Arm Length: </td>
+					<td>Arm Length (inches): </td>
 					<td><input type="text" name="armLength"></td>
-					<td>Collar Size: </td>
+					<td>Collar Size (inches): </td>
 					<td><input type="text" name="collarSize"></td>
-					<td>Waist Size: </td>
+					<td>Waist Size (inches): </td>
 					<td><input type="text" name="waistSize"></td>																	
 				</tr>
 			</table>
@@ -80,11 +115,11 @@
 		<template id="tempPants">
 			<table>
 				<tr>
-					<td>width: </td>
+					<td>Width (inches): </td>
 					<td><input type="text" name="pantsWidth"></td>
 				</tr>
 				<tr>
-					<td>Length: </td>
+					<td>Length (inches): </td>
 					<td><input type="text" name="pantsLength"></td>
 				</tr>					
 			</table>

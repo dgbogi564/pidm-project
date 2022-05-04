@@ -22,7 +22,7 @@
 	<body>
 		<%
 			String name = (String) session.getAttribute("name"); 
-			out.print("<h1>Welcome, " + name + " to the Auction Site.</h1>");
+			out.print("<h1>Welcome " + name + ", to the Auction Site.</h1>");
 		%>
 		
 		<form method="post" action="sell_page.jsp">
