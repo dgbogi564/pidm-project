@@ -14,6 +14,9 @@
 				border-collapse: separate; 
 				border-spacing: 1em 2em;
 			}
+			input {
+				margin: 10px;
+			}
 		</style>
 	</head>
 	<body>
@@ -38,13 +41,23 @@
 				</tr>						
 			</table>
 			
+			<h3>Type of Clothing:</h3>
+			<select name="clothesType" size=1>
+				<option value="shirts">Shirts</option>
+				<option value="pants">Pants</option>
+				<option value="shoes">Shoes</option>
+			</select>	
+			
+			<%
+				/* if clothesType is ______: display that option here...   */
+			%>		
+			
 			<table>
 				<tr>
 					<td><input type="submit" value="Submit"></td>
 					<td><input type="submit" formaction="auction_page.jsp" formmethod="POST" value="Cancel"></td>
 				</tr>
 			</table>
-				
 		</form>
 		
 
