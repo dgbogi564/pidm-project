@@ -67,11 +67,11 @@
 			<table>
 				<tr>
 					<td>Arm Length: </td>
-					<td><input type="text" name="itemName"></td>
+					<td><input type="text" name="armLength"></td>
 					<td>Collar Size: </td>
-					<td><input type="text" name="itemName"></td>
+					<td><input type="text" name="collarSize"></td>
 					<td>Waist Size: </td>
-					<td><input type="text" name="itemName"></td>																	
+					<td><input type="text" name="waistSize"></td>																	
 				</tr>
 			</table>
 		</template>	
@@ -81,11 +81,11 @@
 			<table>
 				<tr>
 					<td>width: </td>
-					<td><input type="text" name="itemName"></td>
+					<td><input type="text" name="pantsWidth"></td>
 				</tr>
 				<tr>
 					<td>Length: </td>
-					<td><input type="text" name="itemName"></td>
+					<td><input type="text" name="pantsLength"></td>
 				</tr>					
 			</table>
 		</template>	
@@ -95,7 +95,7 @@
 			<table>
 				<tr>
 					<td>Size: </td>
-					<td><input type="text" name="itemName"></td>
+					<td><input type="text" name="shoeSize"></td>
 				</tr>
 			</table>
 		</template>	
@@ -103,8 +103,11 @@
 		<!-- Javascript: calls on template & append the respective info  -->
 		<script>			
 			function clothType() {
+				/* gets the selected value from the id = "mySelect" */
 				let x = document.getElementById("mySelect").value;
 				let placeholder = document.getElementById('templateHolder');
+				/* reset placeholder inside to blank */
+				placeholder.innerHTML = '';
 				
 				if (x == "shirts") {
 					let temp = document.getElementsByTagName("template")[0]
