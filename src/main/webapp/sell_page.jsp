@@ -21,6 +21,9 @@
 			input {
 				margin: 10px;
 			}
+			textarea {
+				margin: 20px 0
+			}
 		</style>
 	</head>
 	<body>
@@ -32,18 +35,26 @@
 					<td><input type="text" name="itemName"></td>
 				</tr>
 				<tr>
+					<td>Manufacturer</td>
+					<td><input type="text" name="manufacturer"></td>
+				</tr>					
+				<tr>
 					<td>Color</td>
 					<td><input type="text" name="color"></td>
 				</tr>
 				<tr>
 					<td>Condition</td>
 					<td><input type="text" name="condition"></td>
-				</tr>
-				<tr>
-					<td>Manufacturer</td>
-					<td><input type="text" name="manufacturer"></td>
-				</tr>						
+				</tr>					
 			</table>
+			
+			<textarea name="description" rows="5" cols="35">
+				Please enter your item's description here! (Max 128 characters)
+			</textarea>
+			
+			<br>
+			<label>Quantity: </label>
+			<input type="text" name="quantity">
 			
 			<h3>Type of Clothing:</h3>
 			<select name="clothesType" id= "mySelect" onchange="clothType()">
@@ -51,9 +62,18 @@
 				<option value="pants">Pants</option>
 				<option value="shoes">Shoes</option>
 			</select>	
-			<!-- we will use template to put info here -->
-			<p id="templateHolder">
-			</p>
+			
+			<!-- we will use template to put info here (Set start to show Shirt info) -->
+			<table id="templateHolder">
+				<tr>
+					<td>Arm Length (inches): </td>
+					<td><input type="text" name="armLength"></td>
+					<td>Collar Size (inches): </td>
+					<td><input type="text" name="collarSize"></td>
+					<td>Waist Size (inches): </td>
+					<td><input type="text" name="waistSize"></td>																	
+				</tr>
+			</table>			
 			
 			<hr>
 			<table>
@@ -143,6 +163,7 @@
 				let placeholder = document.getElementById('templateHolder');
 				/* reset placeholder inside to blank */
 				placeholder.innerHTML = '';
+				placeholder.setAttribute('style', 'border: none');
 				
 				if (x == "shirts") {
 					let temp = document.getElementsByTagName("template")[0]
