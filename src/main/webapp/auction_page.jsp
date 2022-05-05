@@ -48,14 +48,16 @@
 			<legend>Auctions</legend>
 			<table>
 				<tr>
-					<th>Name</th>
+					<th>Title</th>
 					<th>Item ID</th>
 					<th>Color</th>
 					<th>Condition</th>
 					<th>Manufacturer</th>
 					<th>Highest Bid</th>
-	
-					<th>Place Bid!</th>
+					
+					<!-- Should take us to the individual auction page
+					 where we can see more info & place bid -->
+					<th>See Info Here!</th>
 				</tr>
 			</table>
 		</fieldset>

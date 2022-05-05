@@ -97,20 +97,23 @@
 			String insert3 = "INSERT INTO Shoes(size, itemId)" + "VALUES (?, ?)";	
 			
 			if(clothesType == "shirts") {
-				ps.setFloat(1, armLength);
-				ps.setFloat(2, collarSize);
-				ps.setFloat(3, waistSize);
-				ps.setInt(4, itemId);
-				ps.executeUpdate(insert1);
+				PreparedStatement ps1 = con.prepareStatement(insert1);
+				ps1.setFloat(1, armLength);
+				ps1.setFloat(2, collarSize);
+				ps1.setFloat(3, waistSize);
+				ps1.setInt(4, itemId);
+				ps1.executeUpdate(insert1);
 			} else if (clothesType == "pants") {
-				ps.setFloat(1, width);
-				ps.setFloat(2, length);
-				ps.setInt(3, itemId);
-				ps.executeUpdate(insert2);
+				PreparedStatement ps2 = con.prepareStatement(insert2);
+				ps2.setFloat(1, width);
+				ps2.setFloat(2, length);
+				ps2.setInt(3, itemId);
+				ps2.executeUpdate(insert2);
 			} else {
-				ps.setFloat(1, shoeSize);
-				ps.setInt(2, itemId);
-				ps.executeUpdate(insert3);
+				PreparedStatement ps3 = con.prepareStatement(insert3);
+				ps3.setFloat(1, shoeSize);
+				ps3.setInt(2, itemId);
+				ps3.executeUpdate(insert3);
 			}
 			
 			// 3) Make an insert statement for the Auction table:
