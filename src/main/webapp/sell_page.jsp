@@ -62,6 +62,9 @@
 			
 			<h3>Type of Clothing:</h3>
 			<select name="clothesType" id= "mySelect" onchange="clothType()">
+		        <option value="none" selected disabled hidden>
+		          Select an Option
+		      	</option>			
 				<option value="shirts">Shirts</option>
 				<option value="pants">Pants</option>
 				<option value="shoes">Shoes</option>
@@ -69,14 +72,6 @@
 			
 			<!-- we will use template to put info here (Set start to show Shirt info) -->
 			<table id="templateHolder">
-				<tr>
-					<td>Arm Length (inches): </td>
-					<td><input type="text" name="armLength"></td>
-					<td>Collar Size (inches): </td>
-					<td><input type="text" name="collarSize"></td>
-					<td>Waist Size (inches): </td>
-					<td><input type="text" name="waistSize"></td>																	
-				</tr>
 			</table>			
 			
 			<hr>
