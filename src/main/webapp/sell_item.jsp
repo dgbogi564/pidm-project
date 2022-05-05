@@ -33,12 +33,7 @@
 			String condition = request.getParameter("condition");	
 			/* TABLE Shirts/Pants/Shoes */
 			String clothesType = request.getParameter("clothesType");	
-/* 			float armLength = Float.parseFloat(request.getParameter("armLength"));	
-			float collarSize = Float.parseFloat(request.getParameter("collarSize"));	
-			float waistSize = Float.parseFloat(request.getParameter("waistSize"));	
-			float pantsWidth = Float.parseFloat(request.getParameter("pantsWidth"));	
-			float pantsLength = Float.parseFloat(request.getParameter("pantsLength"));	
-			float shoeSize = Float.parseFloat(request.getParameter("shoeSize")); */
+
 			/* TABLE Auction */
 			int quantity = Integer.parseInt(request.getParameter("quantity"));	
 			String description = request.getParameter("description");	
@@ -46,6 +41,7 @@
 			SimpleDateFormat expirDate = new SimpleDateFormat("MM/dd/yyyy");
 			java.util.Date util_StartDate = expirDate.parse(request.getParameter("expirDate") );
 			java.sql.Date sql_StartDate = new java.sql.Date( util_StartDate.getTime() );
+			/* not sure if we use expirDate or expirTime  . . . */
 		/* 	Date expirTime = request.getParameter("expirTime");	 */
 			float initPrice = Float.parseFloat(request.getParameter("initPrice"));	
 			float miniPrice = Float.parseFloat(request.getParameter("miniPrice"));	
@@ -55,7 +51,7 @@
 			// Stores item ID, auctionId, sellerId
 			/* Get item ID */
 			int itemId;
-			String GetLastItemId = "SELECT itemId FROM Clothes ORDER BY userId DESC LIMIT 1";
+			String GetLastItemId = "SELECT itemId FROM Clothes ORDER BY itemId DESC LIMIT 1";
 			result = stmt.executeQuery(GetLastItemId);
 			if(result.next()) {
 				itemId = Integer.parseInt(result.getString("itemId")) + 1;
