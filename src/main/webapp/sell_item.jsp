@@ -24,8 +24,7 @@
 			Statement stmt = con.createStatement();
 			ResultSet result;
 			
-			
-			// Get parameters from the HTML form at the sell_page.jsp
+			/**** Get parameters from the HTML form at the sell_page.jsp ****/
 			/* TABLE Clothes */
 			String itemName = request.getParameter("itemName");
 			String manufacturer = request.getParameter("manufacturer");	
@@ -42,13 +41,14 @@
 			java.util.Date util_StartDate = expirDate.parse(request.getParameter("expirDate") );
 			java.sql.Date sql_StartDate = new java.sql.Date( util_StartDate.getTime() );
 			/* not sure if we use expirDate or expirTime  . . . */
-		/* 	Date expirTime = request.getParameter("expirTime");	 */
+			/* Date expirTime = request.getParameter("expirTime"); */		
 			float initPrice = Float.parseFloat(request.getParameter("initPrice"));	
 			float miniPrice = Float.parseFloat(request.getParameter("miniPrice"));	
-			float increment = Float.parseFloat(request.getParameter("increment"));
+			float increment = Float.parseFloat(request.getParameter("increment"));				
+
 			
 			
-			// Stores item ID, auctionId, sellerId
+			/*** Stores item ID, auctionId, sellerId ***/
 			/* Get item ID */
 			int itemId;
 			String GetLastItemId = "SELECT itemId FROM Clothes ORDER BY itemId DESC LIMIT 1";
@@ -73,7 +73,7 @@
 			
 			
 			// 1) Make an insert statement for the Clothes table:
-			String insert = "INSERT INTO Clothes(name, manufacturer, color, condition, itemId)"
+			String insert = "INSERT INTO Clothes(name, manufacturer, color, `condition`, itemId)"
 					+ "VALUES (?, ?, ?, ?, ?)";			
 			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
 			PreparedStatement ps = con.prepareStatement(insert);		
@@ -143,8 +143,10 @@
 
 		} catch (Exception ex) {
 			out.print(ex);
+			ex.printStackTrace();
 			out.print("<br>");
 			out.print("Item added failed.");
+			out.print("<form method=\"post\" action=\"sell_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Try Again\" />\n\t\t</form>");
 		}			
 			
 			

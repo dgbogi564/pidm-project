@@ -27,6 +27,10 @@
 		</style>
 	</head>
 	<body>
+		<%
+		String name = (String) session.getAttribute("name"); 
+		out.print("<h1>Templaceholder: " + name);
+		%>
 		<h1> Add Item for Auction </h1>
 		<form method="get" action="sell_item.jsp">
 			<table>
