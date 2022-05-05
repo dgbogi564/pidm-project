@@ -33,12 +33,12 @@
 			String condition = request.getParameter("condition");	
 			/* TABLE Shirts/Pants/Shoes */
 			String clothesType = request.getParameter("clothesType");	
-			float armLength = Float.parseFloat(request.getParameter("armLength"));	
+/* 			float armLength = Float.parseFloat(request.getParameter("armLength"));	
 			float collarSize = Float.parseFloat(request.getParameter("collarSize"));	
 			float waistSize = Float.parseFloat(request.getParameter("waistSize"));	
 			float pantsWidth = Float.parseFloat(request.getParameter("pantsWidth"));	
 			float pantsLength = Float.parseFloat(request.getParameter("pantsLength"));	
-			float shoeSize = Float.parseFloat(request.getParameter("shoeSize"));
+			float shoeSize = Float.parseFloat(request.getParameter("shoeSize")); */
 			/* TABLE Auction */
 			int quantity = Integer.parseInt(request.getParameter("quantity"));	
 			String description = request.getParameter("description");	
@@ -97,6 +97,9 @@
 			String insert3 = "INSERT INTO Shoes(size, itemId)" + "VALUES (?, ?)";	
 			
 			if(clothesType == "shirts") {
+				float armLength = Float.parseFloat(request.getParameter("armLength"));	
+				float collarSize = Float.parseFloat(request.getParameter("collarSize"));	
+				float waistSize = Float.parseFloat(request.getParameter("waistSize"));	
 				PreparedStatement ps1 = con.prepareStatement(insert1);
 				ps1.setFloat(1, armLength);
 				ps1.setFloat(2, collarSize);
@@ -104,12 +107,15 @@
 				ps1.setInt(4, itemId);
 				ps1.executeUpdate(insert1);
 			} else if (clothesType == "pants") {
+				float pantsWidth = Float.parseFloat(request.getParameter("pantsWidth"));	
+				float pantsLength = Float.parseFloat(request.getParameter("pantsLength"));	
 				PreparedStatement ps2 = con.prepareStatement(insert2);
-				ps2.setFloat(1, width);
-				ps2.setFloat(2, length);
+				ps2.setFloat(1, pantsWidth);
+				ps2.setFloat(2, pantsLength);
 				ps2.setInt(3, itemId);
 				ps2.executeUpdate(insert2);
 			} else {
+				float shoeSize = Float.parseFloat(request.getParameter("shoeSize"));
 				PreparedStatement ps3 = con.prepareStatement(insert3);
 				ps3.setFloat(1, shoeSize);
 				ps3.setInt(2, itemId);
@@ -128,7 +134,7 @@
 			ps.setFloat(6, initPrice);
 			ps.setFloat(7, miniPrice);
 			ps.setFloat(8, increment);
-		/* 	ps.setFloat(9, highestBid); */
+		 	ps.setNull(9, java.sql.Types.NULL); 
 			ps.setInt(10, auctionId);
 			ps.setInt(11, sellerId);
 			ps.executeUpdate(insert);
