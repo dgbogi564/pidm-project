@@ -91,7 +91,7 @@
 				</tr>
 				<tr>
 					<td> Hidden Minimum Price ($USD) </td>
-					<td><input type="text" name="miniPrice"></td>		
+					<td><input type="text" name="minPrice"></td>		
 				</tr>										
 			</table>
 			

@@ -54,9 +54,32 @@
 				//Add parameters of the query. Start with 1, the 0-parameter is the INSERT statement itself
 				ps.setString(1, username);
 				ps.setString(2, password);
-				ps.setFloat(3, userId);
+				ps.setInt(3, userId);
 				//Run the query against the DB
 				ps.executeUpdate();
+				
+				
+				
+				// Make statement to get userId, to determine if we make an Admin or Regulars
+				result = stmt.executeQuery("SELECT userId from User WHERE userId = " + userId);
+				result.beforeFirst();
+				result.next();
+				//Create admin
+				if(result.getInt(1) == 1) {
+					String str1 = "INSERT INTO Admin(userId)" + "VALUES (?)";
+					ps = con.prepareStatement(str1);
+					ps.setInt(1, userId);
+					ps.executeUpdate();
+
+				} else {
+					//Create regulars
+					String str2 = "INSERT INTO Regular(userId)" + "VALUES (?)";
+					ps = con.prepareStatement(str2);
+					ps.setInt(1, userId);
+					ps.executeUpdate();
+				}
+				
+				
 				
 				//Close the connection. Don't forget to do it, otherwise you're keeping the resources of the server allocated.
 				con.close();

@@ -30,24 +30,30 @@
 			String manufacturer = request.getParameter("manufacturer");	
 			String color = request.getParameter("color");
 			String condition = request.getParameter("condition");	
+			
 			/* TABLE Shirts/Pants/Shoes */
 			String clothesType = request.getParameter("clothesType");	
-
+				
 			/* TABLE Auction */
 			int quantity = Integer.parseInt(request.getParameter("quantity"));	
 			String description = request.getParameter("description");	
+			
 			//Database accepts only java.sql.Date. So we need to convert java.util.Date into java.sql.Date.
  			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
  			java.util.Date endDate = format.parse(request.getParameter("expirDate"));
-			java.sql.Date sql_EndDate = new java.sql.Date( endDate.getTime() );  
+/* 			java.sql.Date sql_EndDate = new java.sql.Date( endDate.getTime() );  */
+			java.sql.Timestamp sql_EndTime = new java.sql.Timestamp( endDate.getTime() ); 
+/* 			System.out.print(sql_EndDate + "\n"); */
+			System.out.print(sql_EndTime + "\n");
+/* 			System.out.print(endDate + "\n"); */
 	
 			float initPrice = Float.parseFloat(request.getParameter("initPrice"));	
-			float miniPrice = Float.parseFloat(request.getParameter("miniPrice"));	
+			float minPrice = Float.parseFloat(request.getParameter("minPrice"));	
 			float increment = Float.parseFloat(request.getParameter("increment"));				
 
 			
 			
-			/*** Stores item ID, auctionId, sellerId ***/
+			/**** Stores item ID, auctionId, sellerId ****/
 			/* Get item ID */
 			int itemId;
 			String GetLastItemId = "SELECT itemId FROM Clothes ORDER BY itemId DESC LIMIT 1";
@@ -70,7 +76,7 @@
 			Integer sellerId = (Integer) session.getAttribute("userId");
 			
 			
-			System.out.print("Checkpoint1\n");
+
 			// 1) Make an insert statement for the Clothes table:
 			String insert = "INSERT INTO Clothes(name, manufacturer, color, `condition`, itemId)"
 					+ "VALUES (?, ?, ?, ?, ?)";			
@@ -83,7 +89,7 @@
 			ps.setString(4, condition);
 			ps.setInt(5, itemId);
 			ps.executeUpdate();
-			System.out.print("Checkpoint1 END\n");
+
 			
 			// 2) Insert data into appropriate table base on what clothesType is . . . 
 			String insert1 = "INSERT INTO Shirts(armLength, collarSize, waistSize, itemId)"
@@ -101,7 +107,7 @@
 				ps1.setFloat(2, collarSize);
 				ps1.setFloat(3, waistSize);
 				ps1.setInt(4, itemId);
-				ps1.executeUpdate(insert1);
+				ps1.executeUpdate();
 			} 
 			if (clothesType == "pants") {
 				PreparedStatement ps2 = con.prepareStatement(insert2);
@@ -110,21 +116,22 @@
 				ps2.setFloat(1, pantsWidth);
 				ps2.setFloat(2, pantsLength);
 				ps2.setInt(3, itemId);
-				ps2.executeUpdate(insert2);
+				ps2.executeUpdate();
 			} 
 			if (clothesType == "shoes") {
 				PreparedStatement ps3 = con.prepareStatement(insert3);
 				float shoeSize = Float.parseFloat(request.getParameter("shoeSize"));
 				ps3.setFloat(1, shoeSize);
 				ps3.setInt(2, itemId);
-				ps3.executeUpdate(insert3);
+				ps3.executeUpdate();
 			}
 			
 			System.out.print("Checkpoint2\n");
 			// 3) Make an insert statement for the Auction table:
-			insert = "INSERT INTO Auction(title, description, itemId, "
-					+ "quantity, expiration, initialPrice, minPrice, increment, highestBid, auctionId, sellerId)"
+			insert = "INSERT INTO Auction(title, description, itemId, quantity, "
+					+ "expiration, initialPrice, minPrice, increment, highestBid, auctionId, sellerId)"
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			ps = con.prepareStatement(insert);
 			ps.setString(1, itemName);
 			System.out.print("1\n");
 			ps.setString(2, description);
@@ -133,21 +140,22 @@
 			System.out.print("3\n");
 			ps.setInt(4, quantity);
 			System.out.print("4\n");
-			ps.setDate(5, sql_EndDate);
+			ps.setTimestamp(5, sql_EndTime);
 			System.out.print("5\n");
 			ps.setFloat(6, initPrice);
 			System.out.print("6\n");
-			ps.setFloat(7, miniPrice);
+			ps.setFloat(7, minPrice); 
 			System.out.print("7\n");
-			ps.setFloat(8, increment);
-			System.out.print("8\n");
-		 	ps.setNull(9, java.sql.Types.NULL); 
+ 			ps.setFloat(8, increment); 
+ 			System.out.print("8\n");
+		 	ps.setNull(9, Types.NULL); 
 		 	System.out.print("9\n");
 			ps.setInt(10, auctionId);
 			System.out.print("10\n");
-			ps.setInt(11, sellerId);
-			System.out.print("11\n");
-			ps.executeUpdate(insert);
+ 			ps.setInt(11, sellerId); 
+ 			System.out.print("11\n");
+ 			
+			ps.executeUpdate();
 			System.out.print("Checkpoint2 END\n");
 			
 			//Close the connection. Don't forget to do it, otherwise you're keeping the resources of the server allocated.
@@ -164,7 +172,9 @@
 			out.print("<form method=\"post\" action=\"sell_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Try Again\" />\n\t\t</form>");
 		}			
 			
-			
+			/*  https://stackoverflow.com/questions/45102667/localdatetime-to-java-sql-date-in-java-8 
+				https://www.thecrazyprogrammer.com/2016/02/how-to-insert-date-and-time-in-mysql-using-java.html
+			*/
 	%>
 </body>
 </html>
