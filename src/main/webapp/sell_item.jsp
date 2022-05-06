@@ -96,8 +96,7 @@
 			String insert3 = "INSERT INTO Shoes(size, itemId)" + "VALUES (?, ?)";	
 			
 			System.out.print(clothesType + "\n");
-			if(clothesType == "shirts") {
-				System.out.print(insert1 + "\n");
+			if(clothesType.equals("shirts")) {
 				ps = con.prepareStatement(insert1);
 				float armLength = Float.parseFloat(request.getParameter("armLength"));	
 				float collarSize = Float.parseFloat(request.getParameter("collarSize"));	
@@ -108,8 +107,8 @@
 				ps.setInt(4, itemId);
 				ps.executeUpdate();
 			} 
-			if (clothesType == "pants") {
-				PreparedStatement ps2 = con.prepareStatement(insert2);
+			if (clothesType.equals("pants")) {
+				ps = con.prepareStatement(insert2);
 				float pantsWidth = Float.parseFloat(request.getParameter("pantsWidth"));	
 				float pantsLength = Float.parseFloat(request.getParameter("pantsLength"));	
 				ps.setFloat(1, pantsWidth);
@@ -117,8 +116,8 @@
 				ps.setInt(3, itemId);
 				ps.executeUpdate();
 			} 
-			if (clothesType == "shoes") {
-				PreparedStatement ps3 = con.prepareStatement(insert3);
+			if (clothesType.equals("shoes")) {
+				ps = con.prepareStatement(insert3);
 				float shoeSize = Float.parseFloat(request.getParameter("shoeSize"));
 				ps.setFloat(1, shoeSize);
 				ps.setInt(2, itemId);
