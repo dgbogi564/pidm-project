@@ -97,31 +97,32 @@
 			
 			System.out.print(clothesType + "\n");
 			if(clothesType == "shirts") {
-				PreparedStatement ps1 = con.prepareStatement(insert1);
+				System.out.print(insert1 + "\n");
+				ps = con.prepareStatement(insert1);
 				float armLength = Float.parseFloat(request.getParameter("armLength"));	
 				float collarSize = Float.parseFloat(request.getParameter("collarSize"));	
 				float waistSize = Float.parseFloat(request.getParameter("waistSize"));	
-				ps1.setFloat(1, armLength);
-				ps1.setFloat(2, collarSize);
-				ps1.setFloat(3, waistSize);
-				ps1.setInt(4, itemId);
-				ps1.executeUpdate();
+				ps.setFloat(1, armLength);
+				ps.setFloat(2, collarSize);
+				ps.setFloat(3, waistSize);
+				ps.setInt(4, itemId);
+				ps.executeUpdate();
 			} 
 			if (clothesType == "pants") {
 				PreparedStatement ps2 = con.prepareStatement(insert2);
 				float pantsWidth = Float.parseFloat(request.getParameter("pantsWidth"));	
 				float pantsLength = Float.parseFloat(request.getParameter("pantsLength"));	
-				ps2.setFloat(1, pantsWidth);
-				ps2.setFloat(2, pantsLength);
-				ps2.setInt(3, itemId);
-				ps2.executeUpdate();
+				ps.setFloat(1, pantsWidth);
+				ps.setFloat(2, pantsLength);
+				ps.setInt(3, itemId);
+				ps.executeUpdate();
 			} 
 			if (clothesType == "shoes") {
 				PreparedStatement ps3 = con.prepareStatement(insert3);
 				float shoeSize = Float.parseFloat(request.getParameter("shoeSize"));
-				ps3.setFloat(1, shoeSize);
-				ps3.setInt(2, itemId);
-				ps3.executeUpdate();
+				ps.setFloat(1, shoeSize);
+				ps.setInt(2, itemId);
+				ps.executeUpdate();
 			}
 			
 			// 3) Make an insert statement for the Auction table:
@@ -148,12 +149,15 @@
 			con.close();
 
 			out.print("Item added successful.");
+			out.print("<br>");
+			out.print("<br>");
 			out.print("<form method=\"post\" action=\"auction_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to Auction page\" />\n\t\t</form>");
 			
 
 		} catch (Exception ex) {
 			out.print(ex);
 			ex.printStackTrace();
+			out.print("<br>");
 			out.print("<br>");
 			out.print("Item added failed.");
 			out.print("<form method=\"post\" action=\"sell_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Try Again\" />\n\t\t</form>");
