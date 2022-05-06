@@ -78,12 +78,8 @@
 			<table>
 				<h3>Duration of Auction:</h3>
 				<tr>
-					<td>Expiration Date (mm/dd/yyyy): </td>
-					<td><input type="text" name="expirDate"></td>							
-				</tr>	
-				<tr>
-					<td>Time: </td>		
-					<td><input type="time" name="expirTime" min="00:00" max="24:00" required></td>
+					<td>Expiration Date & Time: </td>
+					<td><input type="datetime-local" name="expirDate"></td>							
 				</tr>								
 			</table>
 			
