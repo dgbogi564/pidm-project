@@ -27,7 +27,7 @@
 			//Delete Clothes & its "isA relations" base on Auction's itemIds
 			String getItemId = "SELECT itemId FROM Auction WHERE sellerId = " + userId;
 			ResultSet result = stmt.executeQuery(getItemId);
-			//Store the resultSet data into array(itemId) to be used for executeUpdate
+			//Store the resultSet data into arrayList(itemId) to be used for executeUpdate
 			ArrayList<Integer> itemIdList = new ArrayList<Integer>();
 			while (result.next()) {
 				itemIdList.add(result.getInt("itemId"));

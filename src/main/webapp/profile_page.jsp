@@ -17,7 +17,7 @@
 			out.print("<h1>Welcome, " + name + ".</h1>");
 		%>
 
-		<form method="get" action="">
+		<form method="get" action="alert_page.jsp">
 			<h2>Wishlist</h2>
 			<input type="submit" value="Set up an alert!">
 		</form>
