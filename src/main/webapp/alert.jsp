@@ -28,8 +28,9 @@
 			
 			/* Clothes Detail */
 			String color = request.getParameter("color");
-			String manufacturer = request.getParameter("manufacturer");		
+			String manufacturer = request.getParameter("manufacturer");
 			String keywords = request.getParameter("keywords");	
+			keywords.toLowerCase();
 			
 			/* Amount Limits */
 			float max = Float.parseFloat(request.getParameter("max"));	
@@ -49,41 +50,55 @@
 			if (clothesType.equals("pants")) {
 				pantsWidth = Float.parseFloat(request.getParameter("pantsWidth"));	
 				pantsLength = Float.parseFloat(request.getParameter("pantsLength"));
-				specificClothes += "SELECT itemId FROM Pants WHERE pantsWidth = '" + pantsWidth + 
-						"'and pantsLength = " + pantsLength;
+				specificClothes += "SELECT itemId FROM Pants WHERE width = '" + pantsWidth + 
+						"'and length = " + pantsLength;
 			} 
 			if (clothesType.equals("shoes")) {
 				shoeSize = Float.parseFloat(request.getParameter("shoeSize"));
-				specificClothes += "SELECT itemId FROM Shoes WHERE shoeSize = " + shoeSize;
+				specificClothes += "SELECT itemId FROM Shoes WHERE size = " + shoeSize;
 			}
+			
 			
 			/***** Get current userId *****/
 			Integer userId = (Integer) session.getAttribute("userId");
 			
 			/***** Get itemIds base on parameters of alert *****/
-			String getIdClothes = "SELECT itemId FROM Clothes WHERE color = '" + color + 
-			"' and manufacturer = " + manufacturer;
+ 			String getIdClothes = "SELECT itemId FROM Clothes WHERE color = '" + color + 
+			"' and manufacturer IS NOT NULL and manufacturer = '" + manufacturer + 
+			"' UNION SELECT itemId from Clothes WHERE color = '" + color + "'"; 
 			
-			String getIdAuction = "SELECT itemId from Auction WHERE minPrice <= '" + max + 
-					"' and highestBid IS NOT NULL and highestBid <= " + max;
-			
+			String getIdAuction = "SELECT itemId, description FROM Auction WHERE initialPrice <= '" + max + 
+					"' and highestBid IS NOT NULL and highestBid <= '" + max + "' and description IS NOT NULL " +
+					"UNION SELECT itemId, description FROM Auction WHERE description IS NOT NULL";
+
 			//Store the resultSet data into arrayList(itemId) to be used for executeUpdate
 			ArrayList<Integer> temp = new ArrayList<Integer>();	
+			//ID from Clothes
 			result = stmt.executeQuery(getIdClothes);
 			while(result.next()) {
 				temp.add(result.getInt("itemId"));
 			}
+
+			//ID from Auction (See if keywords is in description)
 			result = stmt.executeQuery(getIdAuction);
 			while(result.next()) {
-				temp.add(result.getInt("itemId"));
+				String descript1 = result.getString("description");
+				//case insensitive
+				descript1 = descript1.toLowerCase();
+				if(descript1.contains(keywords)) {
+					temp.add(result.getInt("itemId"));
+				}
 			}
+
+			//ID from isA relationship of Clothes
 			result = stmt.executeQuery(specificClothes);
 			while(result.next()) {
 				temp.add(result.getInt("itemId"));
 			}
+			
 			//remove duplicates from arrayList
 			Set<Integer> itemIdList = new LinkedHashSet<Integer>(temp);  
-
+			System.out.println(itemIdList);
 			
 			/***** Update alert *****/
 			//Create a Prepared SQL statement allowing you to introduce the parameters of the query

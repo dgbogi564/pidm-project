@@ -31,7 +31,7 @@
 		</form>
 		<br> 
 		<hr>
-		<form method="post" action="">
+		<form method="post" action="search_page.jsp">
 			<h2>Search for item</h2>
 			<input type="submit" value="Filter">
 		</form>

@@ -64,14 +64,12 @@
 				</tr>
 				<tr>
 					<td> Manufacturer </td>
-					<td><input type="text" name="keywords"></td>		
+					<td><input type="text" name="manufacturer"></td>		
 				</tr>					
 				<tr>
 					<td> Specific Keywords? </td>
 					<td>
-						<textarea name="keywords" rows="5" cols="35">
-							Type in Here
-						</textarea>
+						<textarea name="keywords" rows="5" cols="35">Type in Here</textarea>
 					</td>		
 				</tr>												
 			</table>

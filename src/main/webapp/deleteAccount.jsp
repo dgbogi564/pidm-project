@@ -22,7 +22,12 @@
 
 			//Get attribute userId from session that we set in login.jsp
 			Integer userId = (Integer) session.getAttribute("userId");
-				
+	
+			
+			
+			//Get userId & execute query (Alert Info)
+			String getAlertInfo = "DELETE FROM Alert WHERE userId = '" + userId + "'";
+			stmt.executeUpdate(getAlertInfo);
 			
 			//Delete Clothes & its "isA relations" base on Auction's itemIds
 			String getItemId = "SELECT itemId FROM Auction WHERE sellerId = " + userId;
@@ -55,6 +60,8 @@
 			//Get userId & execute query (User)
 			getUserInfo = "DELETE FROM User WHERE userId = '" + userId + "'";
 			stmt.executeUpdate(getUserInfo);
+			
+
  
 
 			//Close the connection. Don't forget to do it, otherwise you're keeping the resources of the server allocated.
