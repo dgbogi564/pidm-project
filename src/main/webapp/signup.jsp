@@ -26,10 +26,9 @@
 				String username = request.getParameter("username");
 				String password = request.getParameter("password");
 
-
 				//Check if user already exists
-				String FindDuplicate = "SELECT COUNT(*) FROM User WHERE name = " + "\'" + username + "\'";
-				ResultSet result = stmt.executeQuery(FindDuplicate);
+				String findDuplicate = "SELECT COUNT(*) FROM User WHERE name = " + "\'" + username + "\'";
+				ResultSet result = stmt.executeQuery(findDuplicate);
 				result.next();
 				if (Integer.parseInt(result.getString("COUNT(*)")) > 0) {
 					throw new Exception("User already exists.");
@@ -37,7 +36,7 @@
 
 				//Get userId
 				int userId;
-				String GetLastUserId = "SELECT userId FROM user ORDER BY userId DESC LIMIT 1";
+				String GetLastUserId = "SELECT userId FROM User ORDER BY userId DESC LIMIT 1";
 				result = stmt.executeQuery(GetLastUserId);
 				if(result.next()) {
 					userId = Integer.parseInt(result.getString("userId")) + 1;

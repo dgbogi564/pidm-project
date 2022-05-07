@@ -51,10 +51,11 @@
 					<td><input type="text" name="condition"></td>
 				</tr>					
 			</table>
-			
-			<textarea name="description" rows="5" cols="35">
-				Please enter your item's description here! (Max 128 characters)
-			</textarea>
+
+			<br>
+			<label>Description:</label>
+			<br>
+			<textarea name="description" rows="5" cols="35">Please enter your item's description here! (Max 128 characters)</textarea>
 			
 			<br>
 			<label>Quantity: </label>
@@ -118,10 +119,14 @@
 				<tr>
 					<td>Arm Length (inches): </td>
 					<td><input type="text" name="armLength"></td>
+				</tr>
+				<tr>
 					<td>Collar Size (inches): </td>
 					<td><input type="text" name="collarSize"></td>
+				</tr>
+				<tr>
 					<td>Waist Size (inches): </td>
-					<td><input type="text" name="waistSize"></td>																	
+					<td><input type="text" name="waistSize"></td>
 				</tr>
 			</table>
 		</template>	

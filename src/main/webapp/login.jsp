@@ -35,7 +35,6 @@
 				}
 			}
 			
-			
 			//Get parameters from the HTML form at the login-page.jsp
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");

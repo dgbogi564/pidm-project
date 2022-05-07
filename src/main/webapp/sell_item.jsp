@@ -44,7 +44,8 @@
 /* 			java.sql.Date sql_EndDate = new java.sql.Date( endDate.getTime() );  */
 			java.sql.Timestamp sql_EndTime = new java.sql.Timestamp( endDate.getTime() ); 
 
-	
+
+			// IMPLEMENT FORMATTING CHECKING (?)
 			float initPrice = Float.parseFloat(request.getParameter("initPrice"));	
 			float minPrice = Float.parseFloat(request.getParameter("minPrice"));	
 			float increment = Float.parseFloat(request.getParameter("increment"));				

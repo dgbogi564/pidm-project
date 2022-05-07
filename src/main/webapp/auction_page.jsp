@@ -59,6 +59,48 @@
 					 where we can see more info & place bid -->
 					<th>See Info Here!</th>
 				</tr>
+				<%
+					Connection con = null;
+					try {
+						//Get the database connection
+						ApplicationDB db = new ApplicationDB();
+						con = db.getConnection();
+
+						//Create a SQL statement
+						Statement stmt = con.createStatement();
+						ResultSet result;
+
+						String getAuctionTable = "SELECT a.title, a.itemId, c.color, c.condition, c.manufacturer, a.highestBid FROM Auction a, Clothes c WHERE a.itemId = c.itemId";
+						result = stmt.executeQuery(getAuctionTable);
+
+						// Iterate through ResultSet and add to table
+						while (result.next()) {
+							String title = result.getString(1);
+							int id = result.getInt(2);
+							String color = result.getString(3);
+							String condition = result.getString(4);
+							String manufacturer = result.getString(5);
+							double highestBid = result.getFloat(6);
+
+							out.print("<tr>");
+							out.print("<td>" + title + "</td>"); // could just make this an html link
+							out.print("<td>" + id + "</td>");
+							out.print("<td>" + color + "</td>");
+							out.print("<td>" + condition + "</td>");
+							out.print("<td>" + manufacturer + "</td>");
+							out.print("<td>" + (highestBid == 0 ? "None" : highestBid) + "</td>");
+							out.print("<td>" + "</td>"); // IMPLEMENT SEE INFO HERE
+							out.print("</tr>");
+						}
+					} catch (Exception ex) {
+						out.print(ex);
+						ex.printStackTrace();
+						out.print("<br>");
+						out.print("<br>");
+						out.print("Failed to display auctions.");
+						out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go back to profile page\" />\n\t\t</form>");
+					}
+				%>
 			</table>
 		</fieldset>
 						
