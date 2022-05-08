@@ -90,7 +90,7 @@
 				out.print("Signup completed.");
 				out.print("<br>");
 				out.print("<br>");
-				out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go to profile\" />\n\t\t</form>");
+				out.print("<form method=\"post\" action=\"login.jsp\">\n\t\t\t<input type=\"submit\" value=\"Continue\" />\n\t\t</form>");
 
 			} catch (Exception ex) {
 				if (con != null) {
