@@ -54,7 +54,7 @@
 				<th>Title</th>
 				<th>Seller</th>
 				<th>Current Bid</th>
-				<th colspan="2">Time Left</th>
+				<th colspan="2">Expiration</th>
 
 				<!-- Should take us to the individual auction page
 				 where we can see more info & place bid -->
@@ -71,7 +71,7 @@
 					Statement stmt = con.createStatement();
 					ResultSet result;
 
-					String getAuctionTable = "SELECT a.auctionId, a.title, u.name, a.highestBid, a.initialPrice, a.expiration FROM Auction a, User u WHERE a.sellerId = u.userId AND expiration > NOW()";
+					String getAuctionTable = "SELECT a.auctionId, a.title, u.name, a.highestBid, a.initialPrice, a.expiration FROM Auction a, User u WHERE a.sellerId = u.userId";
 					result = stmt.executeQuery(getAuctionTable);
 
 					// For table
@@ -97,7 +97,7 @@
 						out.print("<td style=\"text-align:center\"><a href=\"item_page.jsp?auctionId=" + auctionId + "\">" + title + "</a></td>"); // could just make this an html link
 						out.print("<td style=\"text-align:center\">" + seller + "</td>");
 						out.print("<td style=\"text-align:center\">" + currency.format(currentPrice) + "</td>");
-						out.print("<td style=\"text-align:center\">" + diffDays + "d " + diffHours + "h</td>");
+						out.print("<td style=\"text-align:center\">" + ((expiration - now) < 0 ? "Closed" : (diffDays + "d " + diffHours + "h")) + "</td>");
 						out.print("<td style=\"text-align:center\">" + date.format(expiration) + "</td>");
 						out.print("</tr>");
 					}
