@@ -28,6 +28,7 @@
     String minimumBid = null;
     String expiration = null;
     String timeLeft = null;
+    String currentBidder = null;
 
     try {
         // Get the database connection
@@ -40,7 +41,7 @@
 
         // Get item information
         String getInfo = "SELECT a.title, u.name, a.itemId, a.description, c.manufacturer, c.color, " +
-                "c.condition, a.quantity, a.initialPrice, a.highestBid, a.increment, a.expiration FROM " +
+                "c.condition, a.quantity, a.highestBid, a.initialPrice, a.increment, a.expiration FROM " +
                 "Auction a, User u, Clothes c WHERE a.sellerId = u.userId AND a.itemId = c.itemId AND " +
                 "a.auctionId = " + request.getParameter("auctionId");
         result = stmt.executeQuery(getInfo);
@@ -70,6 +71,12 @@
         long now = (new java.util.Date()).getTime();
         long diff = ((expirationLong - now) - ((expirationLong - now) % 3600000)) / 3600000;
         timeLeft = (diff / 24) + "d " + (diff % 24) + "h";
+
+        result = stmt.executeQuery("SELECT u.name, b.anonymous FROM User u, Auction a, Bid b WHERE a.auctionId = "
+                + auctionId + " AND a.auctionId = b.auctionId AND a.highestBid = b.amount AND b.bidderId = u.userId");
+        result.next();
+        if ((currentBidder = result.getString(1)) == null) throw new Exception("Current bidder not found");
+        if (result.getBoolean(2)) currentBidder = "[anonymous]";
     } catch (Exception ex) {
         out.print(ex);
         ex.printStackTrace();
@@ -108,7 +115,7 @@
     </tr>
 </table>
 <h3>Make a Bid</h3>
-<form method="get" action="make_bid.jsp">
+<form method="get" action="bid.jsp">
     <table>
         <tr>
             <td>Expiration:</td>
@@ -123,15 +130,24 @@
             <td><%=currentBid%></td>
         </tr>
         <tr>
+            <td>Bidder:</td>
+            <td><%=currentBidder%></td>
+        </tr>
+        <tr>
             <td>Minimum Bid:</td>
             <td><%=minimumBid%></td>
         </tr>
         <tr>
-            <td><label>Bid:</label></td>
-            <td><input type="number" min="<%=minimumBidFloat%>" step="0.01"></td>
+            <td><label for="bid">Bid:</label></td>
+            <td><input type="number" id="bid" name="bid" min="<%=minimumBidFloat%>" step="0.01"></td>
+        </tr>
+        <tr>
+            <td><label for="anonymous">Anonymous?</label></td>
+            <td><input type="checkbox" id="anonymous" name="anonymous"></td>
         </tr>
     </table>
-    <input type="submit" formaction="make_bid.jsp" value="Make Bid" formmethod="get">
+    <input type="hidden" name="auctionId" value=<%=auctionId%>>
+    <input type="submit" value="Make Bid">
 </form>
 <hr>
 <h3>Auction Details</h3>
@@ -146,8 +162,8 @@
     </tr>
 </table>
 <br>
-<form>
-    <input type="submit" formaction="auction_page.jsp" formmethod="post" value="Return to Auction Page">
+<form action="auction_page.jsp">
+    <input type="submit" value="Return to Auction Page">
 </form>
 </body>
 </html>
