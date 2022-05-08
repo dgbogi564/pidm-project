@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="com.cs336.pkg.*"%>
-<%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="java.io.*,java.text.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <%@ page session="true" %>
 
@@ -48,24 +48,24 @@
 		<br>		
 		<hr>
 		
-		<!-- Shows Auction & Clothes Info TABLE -->
 		<fieldset>
 			<legend>Auctions</legend>
 			<form action="bid_page.jsp" method="get">
 				<table id="auctionBidder">
 					<tr>
-						<th>Title</th>
-						<th>Item ID</th>
-						<th>Color</th>
-						<th>Condition</th>
-						<th>Manufacturer</th>
-						<th>Highest Bid</th>
-						
-						<!-- Should take us to the individual auction page
-						 where we can see more info & place bid -->
-						<th>See Info Here!</th>
-					</tr>
-					<%
+			<table>
+				<tr>
+					<th>Item ID</th>
+					<th>Title</th>
+					<th>Seller</th>
+					<th>Current Bid</th>
+					<th colspan="2">Time Left</th>
+					
+					<!-- Should take us to the individual auction page
+					 where we can see more info & place bid -->
+<%--					<th>See Info Here!</th>--%>
+				</tr>
+				<%
 					Connection con = null;
 					try {
 						//Get the database connection
@@ -76,27 +76,34 @@
 						Statement stmt = con.createStatement();
 						ResultSet result;
 
-						String getAuctionTable = "SELECT a.title, a.itemId, c.color, c.condition, c.manufacturer, a.highestBid FROM Auction a, Clothes c WHERE a.itemId = c.itemId";
+						String getAuctionTable = "SELECT a.itemId, a.title, u.name, a.highestBid, a.expiration FROM Auction a, User u WHERE a.sellerId = u.userId AND expiration > NOW()";
 						result = stmt.executeQuery(getAuctionTable);
+
+						// For table
+						NumberFormat currency = NumberFormat.getCurrencyInstance();
+						SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+						long now = (new java.util.Date()).getTime();
 
 						// Iterate through ResultSet and add to table
 						while (result.next()) {
-							String title = result.getString(1);
-							int id = result.getInt(2);
-							String color = result.getString(3);
-							String condition = result.getString(4);
-							String manufacturer = result.getString(5);
-							double highestBid = result.getFloat(6);
+							int id = result.getInt(1);
+							String title = result.getString(2);
+							String seller = result.getString(3);
+							double currentPrice = result.getFloat(4);
+							long expiration = (result.getTimestamp(5)).getTime();
+							long diffHours = expiration - now;
+							diffHours = (diffHours - (diffHours % 3600000)) / 3600000;
+							long diffDays = diffHours / 24;
+							diffHours = diffHours % 24;
 
-							out.println("<tr class='data' onclick='myFunction(this)'>");
-							out.println("<td>" + title + "</td>"); // could just make this an html link
-							out.println("<td>" + id + "</td>");
-							out.println("<td>" + color + "</td>");
-							out.println("<td>" + condition + "</td>");
-							out.println("<td>" + manufacturer + "</td>");
-							out.println("<td>" + (highestBid == 0 ? "None" : highestBid) + "</td>");
-							out.println("<td>" + "</td>"); // IMPLEMENT SEE INFO HERE
-							out.println("</tr>");
+							out.print("<tr>");
+							out.print("<td style=\"text-align:center\">" + id + "</td>");
+							out.print("<td style=\"text-align:center\"><a href=\"item_page.jsp?itemId=" + id + "\">" + title + "</a></td>"); // could just make this an html link
+							out.print("<td style=\"text-align:center\">" + seller + "</td>");
+							out.print("<td style=\"text-align:center\">" + currency.format(currentPrice) + "</td>");
+							out.print("<td style=\"text-align:center\">" + diffDays + "d " + diffHours + "h</td>");
+							out.print("<td style=\"text-align:center\">" + date.format(expiration) + "</td>");
+							out.print("</tr>");
 						}
 					} catch (Exception ex) {
 						out.print(ex);
@@ -107,35 +114,34 @@
 						out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go back to profile page\" />\n\t\t</form>");
 					}
 				%>
-				</table>
-			 <!-- IMPORTANT: "can't access javascript variables in JSP. But you can store needed 
-			 data in hidden fields, set its value in client and get it on server over GET or POST."  -->
-			 <!-- <input id=hiddenField type="hidden" name="hiddenData" value="" /> -->
-			 <input type="hidden" id="hiddenField" name="dataStored" value="">				
-			 <button type="hidden" id="autoClick" value="Login" style="display: none;"></button>
-			</form>
-			
+			</table>
+			<!-- IMPORTANT: "can't access javascript variables in JSP. But you can store needed
+			data in hidden fields, set its value in client and get it on server over GET or POST."  -->
+			<!-- <input id=hiddenField type="hidden" name="hiddenData" value="" /> -->
+
+			<input type="hidden" id="hiddenField" name="dataStored" value="">
+			<button type="hidden" id="autoClick" value="Login" style="display: none;"></button>
+		   	</form>
 		</fieldset>
 
-		
-		<script>
+	    <script>
 			function myFunction(selectRow) {
-				let table = document.getElementById("auctionBidder");
-				/* column with itemId */
-			    let columnId = selectRow.cells[1].innerHTML;
-				
+			let table = document.getElementById("auctionBidder");
+			/* column with itemId */
+			let columnId = selectRow.cells[1].innerHTML;
+
 			    /* https://stackoverflow.com/questions/3116058/how-can-i-access-javascript-variables-in-jsp#:~:text=JavaScript%20variable%20is%20on%20client,server%20over%20GET%20or%20POST. */
-			    var getID = document.getElementById("hiddenField");
+				var getID = document.getElementById("hiddenField");
 			    getID.value = columnId;
-			    
-				/* ERROR: this is not redirect page with hidden value.... */
+
+			    /* ERROR: this is not redirect page with hidden value.... */
 			    /* window.location.assign('bid_page.jsp'); */
 			    /* window.location.href = 'bid_page.jsp'; */
-			    
+
 			    /* a button that is click automatically(using javascript) */
 			    document.getElementById("autoClick").click();
-			}			
-		</script>
-		<!-- Reference: solution4 https://localcoder.org/how-to-pass-a-value-from-one-jsp-to-another-jsp-page#:~:text=Can%20be%20done%20in%20three,getAttribute(%22send%22)%3B -->
+		    }
+	   	</script>
+	   	<!-- Reference: solution4 https://localcoder.org/how-to-pass-a-value-from-one-jsp-to-another-jsp-page#:~:text=Can%20be%20done%20in%20three,getAttribute(%22send%22)%3B -->
 	</body>
 </html>
