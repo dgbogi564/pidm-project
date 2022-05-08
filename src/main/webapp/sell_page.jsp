@@ -86,7 +86,6 @@
 						// Get current datetime
 						SimpleDateFormat date = new SimpleDateFormat("YYYY-MM-dd'T'hh:mm");
 						String now = date.format((new Date()).getTime());
-						System.out.println(now);
 					%>
 					<td><input type="datetime-local" name="expirDate" min=<%=now%> required></td>
 				</tr>								
