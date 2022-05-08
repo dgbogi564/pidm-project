@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8" import="com.cs336.pkg.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <%@ page session="true" %>
 
 <!DOCTYPE html>
@@ -36,19 +38,19 @@
 			<table>
 				<tr>
 					<td>Item Name</td>
-					<td><input type="text" name="itemName"></td>
+					<td><input type="text" name="itemName" required></td>
 				</tr>
 				<tr>
 					<td>Manufacturer</td>
-					<td><input type="text" name="manufacturer"></td>
+					<td><input type="text" name="manufacturer" required></td>
 				</tr>					
 				<tr>
 					<td>Color</td>
-					<td><input type="text" name="color"></td>
+					<td><input type="text" name="color" required></td>
 				</tr>
 				<tr>
 					<td>Condition</td>
-					<td><input type="text" name="condition"></td>
+					<td><input type="text" name="condition" required></td>
 				</tr>					
 			</table>
 
@@ -59,7 +61,7 @@
 			
 			<br>
 			<label>Quantity: </label>
-			<input type="text" name="quantity">
+			<input type="text" name="quantity" required>
 			
 			<h3>Type of Clothing:</h3>
 			<select name="clothesType" id= "mySelect" onchange="clothType()">
@@ -80,7 +82,12 @@
 				<h3>Duration of Auction:</h3>
 				<tr>
 					<td>Expiration Date & Time: </td>
-					<td><input type="datetime-local" name="expirDate"></td>							
+					<%
+						// Get current datetime
+						SimpleDateFormat date = new SimpleDateFormat("YYYY-MM-dd'T'hh:mm");
+						String now = date.format((new Date()).getTime());
+					%>
+					<td><input type="datetime-local" name="expirDate" min=<%=now%> required></td>
 				</tr>								
 			</table>
 			
@@ -88,11 +95,11 @@
 				<h3>Set Price:</h3>
 				<tr>
 					<td> Initial Price ($USD) </td>
-					<td><input type="text" name="initPrice"></td>		
+					<td><input type="number" name="initPrice" min="0" step="0.01" required></td>
 				</tr>
 				<tr>
 					<td> Hidden Minimum Price ($USD) </td>
-					<td><input type="text" name="minPrice"></td>		
+					<td><input type="number" name="minPrice" min="0" step="0.01" required></td>
 				</tr>										
 			</table>
 			
@@ -100,18 +107,14 @@
 				<h3>Auction Increment:</h3>
 				<tr>
 					<td> Increment Amount ($USD): </td>
-					<td><input type="text" name="increment"></td>		
+					<td><input type="number" name="increment" min="0.01" step="0.01" required></td>
 				</tr>				
 			</table>
-				
-			<table id="submit">
-				<tr>
-					<td><input type="submit" value="Submit"></td>
-					<td><input type="submit" formaction="auction_page.jsp" formmethod="POST" value="Cancel"></td>
-				</tr>
-			</table>
+			<input type="submit" value="Add Item">
 		</form>
-		
+		<form action="auction_page.jsp" method="post">
+			<input type="submit" value="Return to Auction Page">
+		</form>
 		
 		<!-- this stays hidden, acts as a template-->
 		<template id="tempShirts">

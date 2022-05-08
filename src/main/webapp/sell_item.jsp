@@ -139,7 +139,7 @@
 			ps.setFloat(6, initPrice);
 			ps.setFloat(7, minPrice); 
  			ps.setFloat(8, increment); 
-		 	ps.setNull(9, Types.NULL); 
+		 	ps.setFloat(9, minPrice);
 			ps.setInt(10, auctionId);
  			ps.setInt(11, sellerId); 
  			
