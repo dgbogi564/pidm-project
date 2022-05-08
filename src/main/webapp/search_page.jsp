@@ -45,11 +45,11 @@
 					ResultSet result;
 					
 					
-					//This retrieve the set(itemIdList) from session search.jsp
+					//This retrieve the set(itemIdList) from session search.jsp IF session EXISTS...
 					if(session.getAttribute("itemIdList") != null) {
 						ArrayList<Integer> itemIdList = (ArrayList<Integer>) session.getAttribute("itemIdList");
 						
-						//remove duplicates from arrayList(itemId)
+						//remove duplicates from arrayList(itemId) 
 						Set<Integer> itemIdSet = new LinkedHashSet<Integer>(itemIdList);  
 						String getAuctionTable = "";
 						

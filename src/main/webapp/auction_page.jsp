@@ -48,22 +48,24 @@
 		<br>		
 		<hr>
 		
+		<!-- Shows Auction & Clothes Info TABLE -->
 		<fieldset>
 			<legend>Auctions</legend>
-			<table>
-				<tr>
-					<th>Title</th>
-					<th>Item ID</th>
-					<th>Color</th>
-					<th>Condition</th>
-					<th>Manufacturer</th>
-					<th>Highest Bid</th>
-					
-					<!-- Should take us to the individual auction page
-					 where we can see more info & place bid -->
-					<th>See Info Here!</th>
-				</tr>
-				<%
+			<form action="bid_page.jsp" method="get">
+				<table id="auctionBidder">
+					<tr>
+						<th>Title</th>
+						<th>Item ID</th>
+						<th>Color</th>
+						<th>Condition</th>
+						<th>Manufacturer</th>
+						<th>Highest Bid</th>
+						
+						<!-- Should take us to the individual auction page
+						 where we can see more info & place bid -->
+						<th>See Info Here!</th>
+					</tr>
+					<%
 					Connection con = null;
 					try {
 						//Get the database connection
@@ -86,15 +88,15 @@
 							String manufacturer = result.getString(5);
 							double highestBid = result.getFloat(6);
 
-							out.print("<tr class='data' onclick=\"location.href='bid_page.jsp'\">");
-							out.print("<td>" + title + "</td>"); // could just make this an html link
-							out.print("<td>" + id + "</td>");
-							out.print("<td>" + color + "</td>");
-							out.print("<td>" + condition + "</td>");
-							out.print("<td>" + manufacturer + "</td>");
-							out.print("<td>" + (highestBid == 0 ? "None" : highestBid) + "</td>");
-							out.print("<td>" + "</td>"); // IMPLEMENT SEE INFO HERE
-							out.print("</tr>");
+							out.println("<tr class='data' onclick='myFunction(this)'>");
+							out.println("<td>" + title + "</td>"); // could just make this an html link
+							out.println("<td>" + id + "</td>");
+							out.println("<td>" + color + "</td>");
+							out.println("<td>" + condition + "</td>");
+							out.println("<td>" + manufacturer + "</td>");
+							out.println("<td>" + (highestBid == 0 ? "None" : highestBid) + "</td>");
+							out.println("<td>" + "</td>"); // IMPLEMENT SEE INFO HERE
+							out.println("</tr>");
 						}
 					} catch (Exception ex) {
 						out.print(ex);
@@ -105,8 +107,35 @@
 						out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go back to profile page\" />\n\t\t</form>");
 					}
 				%>
-			</table>
+				</table>
+			 <!-- IMPORTANT: "can't access javascript variables in JSP. But you can store needed 
+			 data in hidden fields, set its value in client and get it on server over GET or POST."  -->
+			 <!-- <input id=hiddenField type="hidden" name="hiddenData" value="" /> -->
+			 <input type="hidden" id="hiddenField" name="dataStored" value="">				
+			 <button type="hidden" id="autoClick" value="Login" style="display: none;"></button>
+			</form>
+			
 		</fieldset>
-						
+
+		
+		<script>
+			function myFunction(selectRow) {
+				let table = document.getElementById("auctionBidder");
+				/* column with itemId */
+			    let columnId = selectRow.cells[1].innerHTML;
+				
+			    /* https://stackoverflow.com/questions/3116058/how-can-i-access-javascript-variables-in-jsp#:~:text=JavaScript%20variable%20is%20on%20client,server%20over%20GET%20or%20POST. */
+			    var getID = document.getElementById("hiddenField");
+			    getID.value = columnId;
+			    
+				/* ERROR: this is not redirect page with hidden value.... */
+			    /* window.location.assign('bid_page.jsp'); */
+			    /* window.location.href = 'bid_page.jsp'; */
+			    
+			    /* a button that is click automatically(using javascript) */
+			    document.getElementById("autoClick").click();
+			}			
+		</script>
+		<!-- Reference: solution4 https://localcoder.org/how-to-pass-a-value-from-one-jsp-to-another-jsp-page#:~:text=Can%20be%20done%20in%20three,getAttribute(%22send%22)%3B -->
 	</body>
 </html>
