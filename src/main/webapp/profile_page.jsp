@@ -42,7 +42,7 @@
 		<hr>
 		
 		<br><br><br>				
-		<form method="get" action="deleteAccount.jsp">
+		<form method="get" action="delete_account.jsp">
 			<input type="submit" value="Delete account">
 		</form> 
 		<br>

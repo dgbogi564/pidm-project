@@ -51,7 +51,7 @@
 				out.print("<br>");
 				out.print("<form method=\"post\" action=\"login_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Continue to profile page\" />\n\t\t</form>");
 			} else {
-				throw new Exception("User does not exist.");
+				throw new Exception("Invalid username or password.");
 			}
 			
 			//Close the connection. Don't forget to do it, otherwise you're keeping the resources of the server allocated.
