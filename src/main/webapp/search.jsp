@@ -10,7 +10,7 @@
 <title>alert page</title>
 </head>
 <body>
-	<!-- find similar info based on alert_page, insert into Alert{itemId, userId} -->
+	<!-- Filter specific info base on search_page parameters -->
 	<%
 		Connection con = null;
 		try {
@@ -59,10 +59,7 @@
 			}
 			
 			
-			/***** Get current userId *****/
-			Integer userId = (Integer) session.getAttribute("userId");
-			
-			/***** Get itemIds base on parameters of alert *****/
+			/***** Get itemIds base on parameters of search *****/
  			String getIdClothes = "SELECT itemId FROM Clothes WHERE color = '" + color + 
 			"' and manufacturer IS NOT NULL and manufacturer = '" + manufacturer + 
 			"' UNION SELECT itemId from Clothes WHERE color = '" + color + "'"; 
@@ -94,37 +91,27 @@
 			result = stmt.executeQuery(specificClothes);
 			while(result.next()) {
 				temp.add(result.getInt("itemId"));
-			}
+			}		
 			
-			//remove duplicates from arrayList (since no duplicates in sets)
-			Set<Integer> itemIdList = new LinkedHashSet<Integer>(temp);  
-			
-			/***** Update alert *****/
-			//Create a Prepared SQL statement allowing you to introduce the parameters of the query
-			String insert = "INSERT INTO Alert(userId, itemId)"
-					+ "VALUES (?, ?)";
-			PreparedStatement ps = con.prepareStatement(insert);	
-			for(int itemIds : itemIdList) {
-				ps.setInt(1, userId);
-				ps.setInt(2, itemIds);
-				ps.executeUpdate();
-			}
+			//RETURN set(itemIdList) as a session for search_page to populate table
+			/* session.setAttribute("itemIdList", itemIdList); */
+			session.setAttribute("itemIdList", temp);
 			
 			//Close the connection. Don't forget to do it, otherwise you're keeping the resources of the server allocated.
 			con.close();
 
-			out.print("Alert created successful.");
+			out.print("Filter/Search successful.");
 			out.print("<br>");
 			out.print("<br>");
-			out.print("<form method=\"post\" action=\"alert_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to Alert page\" />\n\t\t</form>");
+			out.print("<form method=\"post\" action=\"search_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to Search page\" />\n\t\t</form>");
 			
 		} catch (Exception ex) {
 			out.print(ex);
 			ex.printStackTrace();
 			out.print("<br>");
 			out.print("<br>");
-			out.print("Alert creation failed.");
-			out.print("<form method=\"post\" action=\"alert_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Try Again\" />\n\t\t</form>");
+			out.print("Filter/Search failed.");
+			out.print("<form method=\"post\" action=\"search_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Try Again\" />\n\t\t</form>");
 		}	
 			
 	%>
