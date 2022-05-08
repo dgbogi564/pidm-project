@@ -85,7 +85,7 @@
 						String title = result.getString(2);
 						String seller = result.getString(3);
 						double currentPrice;
-						if ((currentPrice = result.getFloat(4)) == 0) result.getFloat(5);
+						if ((currentPrice = result.getFloat(4)) == 0) currentPrice = result.getFloat(5);
 						long expiration = result.getTimestamp(6).getTime();
 						long diffHours = expiration - now;
 						diffHours = (diffHours - (diffHours % 3600000)) / 3600000;
