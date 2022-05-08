@@ -30,7 +30,6 @@
 		%>
 
 		<h1>Alerts: </h1>
-<%--		<fieldset>--%>
 			<table>
 				<tr>
 					<th>Item ID</th>
@@ -97,8 +96,7 @@
 						out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go back to profile page\" />\n\t\t</form>");
 					}
 				%>
-			</table>
-		
+			</table>		
 		
 		<br><br><br>
 		<hr>
