@@ -25,7 +25,12 @@
 	<body>
 		<h1>Place your Bids!</h1>
 		<hr>
-		
+		<!-- THIS PAGE IS REPLACED BY ITEM_PAGE -->
+		<!-- Useful info as reference if needed-->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->
 		<!-- Get the hidden value of "dataStored" from auction_page.jsp -->
  		<%
 	    	if (request.getParameter("dataStored") != null) {
