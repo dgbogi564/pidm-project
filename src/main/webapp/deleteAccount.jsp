@@ -22,7 +22,7 @@
 
 			//Get attribute userId from session that we set in login.jsp
 			Integer userId = (Integer) session.getAttribute("userId");
-			
+	
 			//Get userId & execute query (Alert Info)
 			String getAlertInfo = "DELETE FROM Alert WHERE userId = '" + userId + "'";
 			stmt.executeUpdate(getAlertInfo);
@@ -45,12 +45,10 @@
 				getItemInfo = "DELETE FROM Clothes WHERE itemId = " + itemIdList.get(i);
 				stmt.executeUpdate(getItemInfo);
 			}
-
 			
 			//Get userId & execute query (Auction Info)
 			String getUserInfo = "DELETE FROM Auction WHERE sellerId = '" + userId + "'";
 			stmt.executeUpdate(getUserInfo);
-
 			//Get userId & execute query (Regular)
 			getUserInfo = "DELETE FROM Regular WHERE userId = '" + userId + "'";
 			stmt.executeUpdate(getUserInfo);
@@ -58,18 +56,14 @@
 			//Get userId & execute query (User)
 			getUserInfo = "DELETE FROM User WHERE userId = '" + userId + "'";
 			stmt.executeUpdate(getUserInfo);
- 
-
+			
 			//Close the connection. Don't forget to do it, otherwise you're keeping the resources of the server allocated.
 			con.close();
-
 			out.print("Delete successful.");
 			
 			out.print("<br>");
 			out.print("<br>");
 			out.print("<form method=\"post\" action=\"login_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Return to login page\" />\n\t\t</form>");
-			
-
 		} catch (Exception ex) {
 			out.print(ex);
 			out.print("<br>");

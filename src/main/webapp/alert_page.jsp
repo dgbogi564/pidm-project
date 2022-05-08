@@ -30,6 +30,7 @@
 		%>
 
 		<h1>Alerts: </h1>
+<%--		<fieldset>--%>
 			<table>
 				<tr>
 					<th>Item ID</th>
@@ -96,7 +97,9 @@
 						out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go back to profile page\" />\n\t\t</form>");
 					}
 				%>
-			</table>		
+			</table>
+<%--		</fieldset>--%>
+		
 		
 		<br><br><br>
 		<hr>
@@ -125,7 +128,7 @@
 				</tr>
 				<tr>
 					<td> Manufacturer </td>
-					<td><input type="text" name="manufacturer"></td>		
+					<td><input type="text" name="keywords"></td>		
 				</tr>					
 				<tr>
 					<td> Specific Keywords? </td>
