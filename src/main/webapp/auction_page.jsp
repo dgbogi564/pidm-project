@@ -17,6 +17,10 @@
 		table {
 			width: 100%;
 		}
+		.data:hover {
+			cursor: pointer;
+			background-color: #58C9FF;
+		}
 	</style>	
 	</head>
 	<body>
@@ -82,7 +86,7 @@
 							String manufacturer = result.getString(5);
 							double highestBid = result.getFloat(6);
 
-							out.print("<tr>");
+							out.print("<tr class='data' onclick=\"location.href='bid_page.jsp'\">");
 							out.print("<td>" + title + "</td>"); // could just make this an html link
 							out.print("<td>" + id + "</td>");
 							out.print("<td>" + color + "</td>");
