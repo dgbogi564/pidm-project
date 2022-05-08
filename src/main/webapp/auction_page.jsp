@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="com.cs336.pkg.*"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="com.cs336.pkg.*"%>
 <%@ page import="java.io.*,java.text.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <%@ page session="true" %>
@@ -55,7 +54,7 @@
 					<tr>
 			<table>
 				<tr>
-					<th>Item ID</th>
+					<th>Auction ID</th>
 					<th>Title</th>
 					<th>Seller</th>
 					<th>Current Bid</th>
@@ -76,7 +75,7 @@
 						Statement stmt = con.createStatement();
 						ResultSet result;
 
-						String getAuctionTable = "SELECT a.itemId, a.title, u.name, a.highestBid, a.expiration FROM Auction a, User u WHERE a.sellerId = u.userId AND expiration > NOW()";
+						String getAuctionTable = "SELECT a.auctionId, a.title, u.name, a.highestBid, a.initialPrice, a.expiration FROM Auction a, User u WHERE a.sellerId = u.userId AND expiration > NOW()";
 						result = stmt.executeQuery(getAuctionTable);
 
 						// For table
@@ -86,32 +85,33 @@
 
 						// Iterate through ResultSet and add to table
 						while (result.next()) {
-							int id = result.getInt(1);
+							int auctionId = result.getInt(1);
 							String title = result.getString(2);
 							String seller = result.getString(3);
-							double currentPrice = result.getFloat(4);
-							long expiration = (result.getTimestamp(5)).getTime();
+							double currentPrice;
+							if ((currentPrice = result.getFloat(4)) == 0) result.getFloat(5);
+							long expiration = result.getTimestamp(6).getTime();
 							long diffHours = expiration - now;
 							diffHours = (diffHours - (diffHours % 3600000)) / 3600000;
 							long diffDays = diffHours / 24;
 							diffHours = diffHours % 24;
 
 							out.print("<tr>");
-							out.print("<td style=\"text-align:center\">" + id + "</td>");
-							out.print("<td style=\"text-align:center\"><a href=\"item_page.jsp?itemId=" + id + "\">" + title + "</a></td>"); // could just make this an html link
+							out.print("<td style=\"text-align:center\">" + auctionId + "</td>");
+							out.print("<td style=\"text-align:center\"><a href=\"item_page.jsp?auctionId=" + auctionId + "\">" + title + "</a></td>"); // could just make this an html link
 							out.print("<td style=\"text-align:center\">" + seller + "</td>");
 							out.print("<td style=\"text-align:center\">" + currency.format(currentPrice) + "</td>");
 							out.print("<td style=\"text-align:center\">" + diffDays + "d " + diffHours + "h</td>");
 							out.print("<td style=\"text-align:center\">" + date.format(expiration) + "</td>");
 							out.print("</tr>");
 						}
+						con.close();
 					} catch (Exception ex) {
 						out.print(ex);
 						ex.printStackTrace();
 						out.print("<br>");
 						out.print("<br>");
 						out.print("Failed to display auctions.");
-						out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go back to profile page\" />\n\t\t</form>");
 					}
 				%>
 			</table>
