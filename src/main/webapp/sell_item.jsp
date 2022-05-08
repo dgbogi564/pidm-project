@@ -13,6 +13,7 @@
 <body>
 	<%
 		Connection con = null;
+
 		try {
 			//Get the database connection
 			ApplicationDB db = new ApplicationDB();
@@ -21,6 +22,12 @@
 			//Create a SQL statement
 			Statement stmt = con.createStatement();
 			ResultSet result;
+
+			// Check if user is an admin
+			Integer sellerId = (Integer) session.getAttribute("userId");
+			result = stmt.executeQuery("SELECT COUNT(*) FROM Admin WHERE userId = " + sellerId);
+			result.next();
+			if (result.getInt(1) != 0) throw new Exception("Admins cannot sell items");
 			
 			/**** Get parameters from the HTML form at the sell_page.jsp ****/
 			/* TABLE Clothes */
@@ -69,10 +76,6 @@
 			} else {
 				auctionId = 1;
 			}
-			/* Get sellerId (Current user) */
-			Integer sellerId = (Integer) session.getAttribute("userId");
-			
-			
 
 			// 1) Make an insert statement for the Clothes table:
 			String insert = "INSERT INTO Clothes(name, manufacturer, color, `condition`, itemId)"
