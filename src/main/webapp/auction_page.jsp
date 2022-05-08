@@ -46,83 +46,78 @@
 		</form>
 		<br>		
 		<hr>
-		
-		<fieldset>
-			<legend>Auctions</legend>
-			<form action="bid_page.jsp" method="get">
-				<table id="auctionBidder">
-					<tr>
-			<table>
-				<tr>
-					<th>Auction ID</th>
-					<th>Title</th>
-					<th>Seller</th>
-					<th>Current Bid</th>
-					<th colspan="2">Time Left</th>
-					
-					<!-- Should take us to the individual auction page
-					 where we can see more info & place bid -->
+
+		<h2>Auctions</h2>
+		<table>
+			<tr>
+				<th>Auction ID</th>
+				<th>Title</th>
+				<th>Seller</th>
+				<th>Current Bid</th>
+				<th colspan="2">Time Left</th>
+
+				<!-- Should take us to the individual auction page
+				 where we can see more info & place bid -->
 <%--					<th>See Info Here!</th>--%>
-				</tr>
-				<%
-					Connection con = null;
-					try {
-						//Get the database connection
-						ApplicationDB db = new ApplicationDB();
-						con = db.getConnection();
+			</tr>
+			<%
+				Connection con = null;
+				try {
+					//Get the database connection
+					ApplicationDB db = new ApplicationDB();
+					con = db.getConnection();
 
-						//Create a SQL statement
-						Statement stmt = con.createStatement();
-						ResultSet result;
+					//Create a SQL statement
+					Statement stmt = con.createStatement();
+					ResultSet result;
 
-						String getAuctionTable = "SELECT a.auctionId, a.title, u.name, a.highestBid, a.initialPrice, a.expiration FROM Auction a, User u WHERE a.sellerId = u.userId AND expiration > NOW()";
-						result = stmt.executeQuery(getAuctionTable);
+					String getAuctionTable = "SELECT a.auctionId, a.title, u.name, a.highestBid, a.initialPrice, a.expiration FROM Auction a, User u WHERE a.sellerId = u.userId AND expiration > NOW()";
+					result = stmt.executeQuery(getAuctionTable);
 
-						// For table
-						NumberFormat currency = NumberFormat.getCurrencyInstance();
-						SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
-						long now = (new java.util.Date()).getTime();
+					// For table
+					NumberFormat currency = NumberFormat.getCurrencyInstance();
+					SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+					long now = (new java.util.Date()).getTime();
 
-						// Iterate through ResultSet and add to table
-						while (result.next()) {
-							int auctionId = result.getInt(1);
-							String title = result.getString(2);
-							String seller = result.getString(3);
-							double currentPrice;
-							if ((currentPrice = result.getFloat(4)) == 0) result.getFloat(5);
-							long expiration = result.getTimestamp(6).getTime();
-							long diffHours = expiration - now;
-							diffHours = (diffHours - (diffHours % 3600000)) / 3600000;
-							long diffDays = diffHours / 24;
-							diffHours = diffHours % 24;
+					// Iterate through ResultSet and add to table
+					while (result.next()) {
+						int auctionId = result.getInt(1);
+						String title = result.getString(2);
+						String seller = result.getString(3);
+						double currentPrice;
+						if ((currentPrice = result.getFloat(4)) == 0) result.getFloat(5);
+						long expiration = result.getTimestamp(6).getTime();
+						long diffHours = expiration - now;
+						diffHours = (diffHours - (diffHours % 3600000)) / 3600000;
+						long diffDays = diffHours / 24;
+						diffHours = diffHours % 24;
 
-							out.print("<tr>");
-							out.print("<td style=\"text-align:center\">" + auctionId + "</td>");
-							out.print("<td style=\"text-align:center\"><a href=\"item_page.jsp?auctionId=" + auctionId + "\">" + title + "</a></td>"); // could just make this an html link
-							out.print("<td style=\"text-align:center\">" + seller + "</td>");
-							out.print("<td style=\"text-align:center\">" + currency.format(currentPrice) + "</td>");
-							out.print("<td style=\"text-align:center\">" + diffDays + "d " + diffHours + "h</td>");
-							out.print("<td style=\"text-align:center\">" + date.format(expiration) + "</td>");
-							out.print("</tr>");
-						}
-						con.close();
-					} catch (Exception ex) {
-						out.print(ex);
-						ex.printStackTrace();
-						out.print("<br>");
-						out.print("<br>");
-						out.print("Failed to display auctions.");
+						out.print("<tr>");
+						out.print("<td style=\"text-align:center\">" + auctionId + "</td>");
+						out.print("<td style=\"text-align:center\"><a href=\"item_page.jsp?auctionId=" + auctionId + "\">" + title + "</a></td>"); // could just make this an html link
+						out.print("<td style=\"text-align:center\">" + seller + "</td>");
+						out.print("<td style=\"text-align:center\">" + currency.format(currentPrice) + "</td>");
+						out.print("<td style=\"text-align:center\">" + diffDays + "d " + diffHours + "h</td>");
+						out.print("<td style=\"text-align:center\">" + date.format(expiration) + "</td>");
+						out.print("</tr>");
 					}
-				%>
-			</table>
-			<!-- IMPORTANT: "can't access javascript variables in JSP. But you can store needed
-			data in hidden fields, set its value in client and get it on server over GET or POST."  -->
-			<!-- <input id=hiddenField type="hidden" name="hiddenData" value="" /> -->
+					con.close();
+				} catch (Exception ex) {
+					out.print(ex);
+					ex.printStackTrace();
+					out.print("<br>");
+					out.print("<br>");
+					out.print("Failed to display auctions.");
+				}
+			%>
+		</table>
+		<!-- IMPORTANT: "can't access javascript variables in JSP. But you can store needed
+		data in hidden fields, set its value in client and get it on server over GET or POST."  -->
+		<!-- <input id=hiddenField type="hidden" name="hiddenData" value="" /> -->
 
-			<input type="hidden" id="hiddenField" name="dataStored" value="">
-			<button type="hidden" id="autoClick" value="Login" style="display: none;"></button>
-		   	</form>
-		</fieldset>
+		<input type="hidden" id="hiddenField" name="dataStored" value="">
+		<button type="hidden" id="autoClick" value="Login" style="display: none;"></button>
+		</form>
 
 	    <script>
 			function myFunction(selectRow) {

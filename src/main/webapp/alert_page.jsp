@@ -10,15 +10,18 @@
 		<meta charset="UTF-8">
 		<title>wishlist / alert page</title>
 		<style>
-			table {
+			table, th, td {
 				border-collapse: separate; 
 				border-spacing: 1em 2em;
+				border-collapse: collapse;
 				border: 1px solid black;
+			}
+			table {
+				width: 100%;
 			}
 			input {
 				margin: 10px;
 			}
-
 		</style>
 	</head>
 	<body>
