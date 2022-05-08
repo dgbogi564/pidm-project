@@ -88,11 +88,11 @@
 				<h3>Set Price:</h3>
 				<tr>
 					<td> Initial Price ($USD) </td>
-					<td><input type="text" name="initPrice"></td>		
+					<td><input type="number" name="initPrice" min="0" step="0.01"></td>
 				</tr>
 				<tr>
 					<td> Hidden Minimum Price ($USD) </td>
-					<td><input type="text" name="minPrice"></td>		
+					<td><input type="number" name="minPrice" min="0" step="0.01"></td>
 				</tr>										
 			</table>
 			
@@ -100,7 +100,7 @@
 				<h3>Auction Increment:</h3>
 				<tr>
 					<td> Increment Amount ($USD): </td>
-					<td><input type="text" name="increment"></td>		
+					<td><input type="number" name="increment" min="0.01" step="0.01"></td>
 				</tr>				
 			</table>
 				
