@@ -102,6 +102,10 @@
         <td>Quantity:</td>
         <td><%=quantity%></td>
     </tr>
+    <tr>
+        <td>Item ID:</td>
+        <td><%=itemId%></td>
+    </tr>
 </table>
 <h3>Make a Bid</h3>
 <form method="get" action="make_bid.jsp">
@@ -129,6 +133,7 @@
     </table>
     <input type="submit" formaction="make_bid.jsp" value="Make Bid" formmethod="get">
 </form>
+<hr>
 <h3>Auction Details</h3>
 <table>
     <tr>
@@ -139,10 +144,10 @@
         <td>Auction ID:</td>
         <td><%=auctionId%></td>
     </tr>
-    <tr>
-        <td>Item ID:</td>
-        <td><%=itemId%></td>
-    </tr>
 </table>
+<br>
+<form>
+    <input type="submit" formaction="auction_page.jsp" formmethod="post" value="Return to Auction Page">
+</form>
 </body>
 </html>
