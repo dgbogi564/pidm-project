@@ -261,13 +261,13 @@
 			else if (auctionStatus != null && auctionStatus.equals("closed")) where += " AND a.expiration <= NOW()";
 			if (titleKeywordsString != null && !titleKeywordsString.equals("")) {
 				for (int i = 0; i < titleKeywords.length; i++) {
-					where += " AND a.title LIKE '%" + titleKeywords[i] + "%'";
+					where += " AND UPPER(a.title) LIKE UPPER('%" + titleKeywords[i] + "%')";
 				}
 			}
 			if (sellerName != null && !sellerName.equals("")) where += " AND u.name = '" + sellerName + "'";
 			if (descriptionKeywordsString != null && !descriptionKeywordsString.equals("")) {
 				for (int i = 0; i < descriptionKeywords.length; i++) {
-					where += " AND a.title LIKE '%" + descriptionKeywords[i] + "%'";
+					where += " AND UPPER(a.title) LIKE UPPER('%" + descriptionKeywords[i] + "%')";
 				}
 			}
 			if (minPrice > 0) where += " AND a.highestBid >= " + minPrice;
