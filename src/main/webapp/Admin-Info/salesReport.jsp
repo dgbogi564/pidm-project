@@ -114,6 +114,7 @@
 			<tbody>
 			
 				<%
+					double highestBid = 0;
 					try {
 						//Get the database connection
 						ApplicationDB db = new ApplicationDB();
@@ -124,64 +125,85 @@
 						ResultSet result;
 
 						//USE THIS ONCE BID IS SET UP!!
-/* 						String getAuctionTable2 = "SELECT a.highestBid, a.itemId, a.sellerId, " +
+ 						String getAuctionTable2 = "SELECT a.highestBid, a.itemId, a.sellerId, " +
 						"c.name FROM Auction a, Clothes c WHERE a.itemId = c.itemId AND a.highestBid IS NOT NULL " +
-						"AND a.expiration < NOW()"; */
-						
-						//TESTING..delete later
-						String getAuctionTable2 = "SELECT a.highestBid, a.itemId, a.sellerId, " +
-						"c.name FROM Auction a, Clothes c WHERE a.itemId = c.itemId " +
-						"AND a.expiration < NOW()";
+						"AND a.expiration < NOW()"; 
 
-						// Get the specific type of clothing
-/* 						String typeShirts = "SELECT c.armLength, c.collarSize, c.waistSize FROM Shirts c, Auction a " +
-							"WHERE c.itemId = a.itemId AND a.itemId = '" + itemId + "'";
-						String typePants = "SELECT p.width, p.length FROM Pants p, Auction a " +
-								"WHERE p.itemId = a.itemId AND a.itemId = '" + itemId + "'";
-						String typeShoes = "SELECT s.size FROM Shoes s, Auction a " +
-								"WHERE s.itemId = a.itemId AND a.itemId = '" + itemId + "'"; */
-						// Shirts
-/* 						result = stmt.executeQuery(typeShirts);
-						if(result.next()) {
-							System.out.println("1");
-							out.print("<tr>");
-							out.print("<td>" + currency.format(highestBid) + "</td>");
-							out.print("<td>" + "</td>");
-							out.print("<td>" + "</td>");
-							out.print("</tr>");
-						} */
-						// Pants
-/* 						result = stmt.executeQuery(typePants);
-						if(result.next()) {
-							System.out.println("2");
-							out.print("<tr>");
-							out.print("<td>" + "</td>");
-							out.print("<td>" + currency.format(highestBid) + "</td>");
-							out.print("<td>" + "</td>");
-							out.print("</tr>");
-						} */
-						// Shoes
-/* 						result = stmt.executeQuery(typeShoes);
-						if(result.next()) {
-							System.out.println("3");
-							out.print("<tr>");
-							out.print("<td>" + "</td>");
-							out.print("<td>" + "</td>");
-							out.print("<td>" + currency.format(highestBid) + "</td>");
-							out.print("</tr>");
-						} */
-					
+						//Arraylist to store the itemIds
+						ArrayList <Integer> itemIds = new ArrayList <Integer>();
 						result = stmt.executeQuery(getAuctionTable2);
 						
 						// Iterate through ResultSet and add to table
 						while (result.next()) {
-							System.out.println("HOW MANY TIMES?");
-							double highestBid = result.getFloat(1);
+							highestBid = result.getFloat(1);
 							int itemId = result.getInt(2);
 							int sellerId = result.getInt(3);
 							String itemName = result.getString(4);
-
+							itemIds.add(itemId);
 						}
+
+						// Get the specific type of clothing
+						for (int i = 0; i < itemIds.size(); i++) {
+							System.out.println("In for loop");
+							result = stmt.executeQuery("SELECT COUNT(*) FROM Shirts WHERE itemId = " + itemIds.get(i));
+							String clothesString;
+							result.next();
+							System.out.println("Check here");
+							if (result.getInt(1) != 0){
+								clothesString = "Shirts";
+							}
+							else {
+								result = stmt.executeQuery("SELECT COUNT(*) FROM Pants WHERE itemId = " + itemIds.get(i));
+								result.first();
+							    if (result.getInt(1) != 0) {
+							    	clothesString = "Pants";
+							    }
+							    else clothesString = "Shoes";
+							}
+							
+							
+							if(clothesString == "Shirts") {
+								String typeShirts = "SELECT c.armLength, c.collarSize, c.waistSize FROM Shirts c, Auction a " +
+										"WHERE c.itemId = a.itemId AND a.itemId = '" + itemIds.get(i) + "'";
+								// Shirts
+		 						result = stmt.executeQuery(typeShirts);
+								if(result.next()) {
+									System.out.println("1");
+									out.print("<tr>");
+									out.print("<td>" + currency.format(highestBid) + "</td>");
+									out.print("<td>" + "</td>");
+									out.print("<td>" + "</td>");
+									out.print("</tr>");
+								} 
+							} 
+							else if(clothesString == "Pants") {
+								String typePants = "SELECT p.width, p.length FROM Pants p, Auction a " +
+										"WHERE p.itemId = a.itemId AND a.itemId = '" + itemIds.get(i) + "'";
+								// Pants
+		 						result = stmt.executeQuery(typePants);
+								if(result.next()) {
+									System.out.println("2");
+									out.print("<tr>");
+									out.print("<td>" + "</td>");
+									out.print("<td>" + currency.format(highestBid) + "</td>");
+									out.print("<td>" + "</td>");
+									out.print("</tr>");
+								} 
+							} else {
+								String typeShoes = "SELECT s.size FROM Shoes s, Auction a " +
+										"WHERE s.itemId = a.itemId AND a.itemId = '" + itemIds.get(i) + "'";
+								// Shoes
+								result = stmt.executeQuery(typeShoes);
+								if(result.next()) {
+									System.out.println("3");
+									out.print("<tr>");
+									out.print("<td>" + "</td>");
+									out.print("<td>" + "</td>");
+									out.print("<td>" + currency.format(highestBid) + "</td>");
+									out.print("</tr>");
+								} 
+							}
+						}		
 						
 						con.close();
 					
