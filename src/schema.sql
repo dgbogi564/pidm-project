@@ -114,6 +114,7 @@ CREATE TABLE AuctionAlert
 	manufacturer		varchar(128),
 	minBid				float,
 	maxBid				float,
+	clothesType			varchar(6),
 	alertId				integer			NOT NULL,
 	userId				integer			NOT NULL,
 	PRIMARY KEY (userId, alertId),
