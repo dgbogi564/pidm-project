@@ -114,3 +114,8 @@ CREATE TABLE Alert
     FOREIGN KEY (userId) REFERENCES User (userId),
     FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
 );
+
+INSERT INTO User(name, password, userId)
+VALUES('admin', 'admin', 1);
+INSERT INTO Admin(userId)
+VALUES (1);
