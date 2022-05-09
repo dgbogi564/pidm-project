@@ -48,13 +48,9 @@
             result = stmt.executeQuery(GetBidderIds);
             ArrayList<Integer> bidderIds = new ArrayList<Integer>();
             while(result.next()) {
-<<<<<<< HEAD
                 int bidderId = Integer.parseInt(result.getString("bidderId"));
-                int auctItemID = Integer.parseInt(session.getAttribute("auctItemID"));
-=======
                 bidderIds.add(result.getInt("bidderId"));
             }
->>>>>>> f494810987e466a98f5404860b7ce748dfd4a790
 
             for (int bidderId: bidderIds) {
                 int itemId = (Integer) session.getAttribute("itemId");
