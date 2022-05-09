@@ -30,14 +30,11 @@
 		<br> 
 		<hr>
 		
-		<h2>Auction Info:</h2>
-		<form method="get" action="">
-			<input type="submit" value="Your Bids">
-		</form> 
-		<br>
-		<form method="get" action="">
-			<input type="submit" value="Items Sold">
-		</form> 					
+		<h2>User Details:</h2>
+		<form method="get" action="user_info.jsp">
+			<input type="hidden" name="userId" value=<%="\"" + (Integer) session.getAttribute("userId") + "\""%>>
+			<input type="submit" value="View Your Auction and Bid History">
+		</form>
 		<br> 
 		<hr>
 		
