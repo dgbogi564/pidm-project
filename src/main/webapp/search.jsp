@@ -10,6 +10,13 @@
 <title>alert page</title>
 </head>
 <body>
+
+		<!-- THIS PAGE IS REPLACED, INFO NOW IN AUCTION_PAGE -->
+		<!-- Useful info as reference if needed-->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->	
 	<!-- Filter specific info base on search_page parameters -->
 	<%
 		Connection con = null;

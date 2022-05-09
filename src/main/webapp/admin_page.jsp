@@ -25,16 +25,6 @@
 	</form>
 	<br>
 	<hr>
-	<form method="get" action="Admin-Info/totalEarnings.jsp">
-		<h2>Total Earnings</h2>
-		<input type="submit" value="Total Earnings">
-	</form>	
-	<br>
-	<hr>
-	<form method="get" action="Admin-Info/bestSelling.jsp">
-		<h2>Best Selling Items & EndUsers</h2>
-		<input type="submit" value="Best Sellings">
-	</form>	
 	<br>
 	<br>
 	<form method="post" action="logout.jsp">

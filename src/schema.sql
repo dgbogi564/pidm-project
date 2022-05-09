@@ -91,6 +91,7 @@ CREATE TABLE Bid
     anonymous bool     NOT NULL,
     auctionId integer  NOT NULL,
     bidderId  integer  NOT NULL,
+    upperLimit float   NOT NULL,
     PRIMARY KEY (amount, bidderId),
     FOREIGN KEY (bidderId) REFERENCES User (userId),
     FOREIGN KEY (auctionId) REFERENCES Auction (auctionId)
@@ -98,7 +99,6 @@ CREATE TABLE Bid
 
 CREATE TABLE Participates
 (
-    upperLimit float   NOT NULL,
     userId     integer NOT NULL,
     auctionId  integer NOT NULL,
     PRIMARY KEY (userId, auctionId),
@@ -116,9 +116,9 @@ CREATE TABLE Alert
 	maxBid				float,
 	clothesType			varchar(6),
 	alertId				integer			NOT NULL,
-	userId				integer			NOT NULL,
-	PRIMARY KEY (userId, alertId),
-	FOREIGN KEY (userId) REFERENCES User (userId)
+	userId				integer			REFERENCES User (userId),
+	itemId              integer,
+	PRIMARY KEY (alertId)
 );
 
 INSERT INTO User(name, password, userId)

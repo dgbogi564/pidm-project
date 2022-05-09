@@ -23,13 +23,17 @@
 			Statement stmt = con.createStatement();
 			
 			//Check if session already exists
-			if (session.getAttribute("userId") != null) {
+			if (session.getAttribute("userId") != null ) {
 				int userId = (Integer) session.getAttribute("userId");
 				String getUserInfo = "SELECT * FROM User WHERE userId = " + userId;
 				ResultSet result = stmt.executeQuery(getUserInfo);
-				if (result.next()) {
+				if (result.next() && userId != 1) {
 					response.sendRedirect("profile_page.jsp");
-				} else {
+				} 
+				else if (result.next() && userId == 1) {
+					response.sendRedirect("admin_page.jsp");
+				} 
+				else {
 					con.close();
 					response.sendRedirect("logout.jsp");
 				}
@@ -42,14 +46,26 @@
 			//Get userId
 			String getUserInfo = "SELECT * FROM User WHERE name = " + "\'" + username + "\'" + " and password = '" + password + "'";
 			ResultSet result = stmt.executeQuery(getUserInfo);
-			int userId;
+
 			if (result.next()) {
 				session.setAttribute("userId", Integer.parseInt(result.getString("userId")));
 				session.setAttribute("name", result.getString("name"));
-				out.print("Login successful.");
-				out.print("<br>");
-				out.print("<br>");
-				out.print("<form method=\"post\" action=\"login_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Continue to profile page\" />\n\t\t</form>");
+				//Regular user
+				int userId = (Integer) session.getAttribute("userId");
+				System.out.println(userId);
+				if(userId != 1) {
+					out.print("Login successful.");
+					out.print("<br>");
+					out.print("<br>");
+					out.print("<form method=\"post\" action=\"login_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Continue to profile page\" />\n\t\t</form>");
+				} 
+				//Admin user
+				else {
+					out.print("Login successful.");
+					out.print("<br>");
+					out.print("<br>");
+					out.print("<form method=\"post\" action=\"admin_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Continue to admin page\" />\n\t\t</form>");
+				}
 			} else {
 				throw new Exception("Invalid username or password.");
 			}
