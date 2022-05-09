@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login</title>
+        <title>Show Users</title>
         <style>
             table, th, td {
                 border-collapse: separate;
@@ -51,21 +51,24 @@
 
                     String query = "SELECT Representative.userId FROM representative";
                     result = stmt.executeQuery(query);
-
-                    while(result.next()) {
-                        int id = result.getInt(1);
-                        query = "SELECT User.name FROM User WHERE User.userId = " + id;
-                        ResultSet result2 = stmt.executeQuery(query);
-                        result2.next();
-                        String user = result2.getString(1);
-
-                        out.print("<tr>");
-                        out.print("<td>" + id + "</td>");
-                        out.print("<td><a href=\"user_info.jsp?userId=" + id + "\">" + user + "</a></td>");
-                        out.print("</tr>");
+                    ArrayList<Integer> userIds = new ArrayList<Integer>();
+                    while (result.next()) {
+                        userIds.add(result.getInt(1));
                     }
+                    result.close();
+                    for(int id: userIds) {
+                        query = "SELECT User.name FROM User WHERE User.userId = " + id;
+                        result = stmt.executeQuery(query);
+                        if (result.next()) {
+                            String user = result.getString(1);
 
-                    con.close();
+                            out.print("<tr>");
+                            out.print("<td>" + id + "</td>");
+                            out.print("<td><a href=\"user_info.jsp?userId=" + id + "\">" + user + "</a></td>");
+                            out.print("</tr>");
+                        }
+                    }
+                    result.close();
                 } catch (Exception ex) {
                     if(con != null) {
                         con.close();
@@ -103,21 +106,24 @@
 
                     String query = "SELECT Regular.userId FROM Regular";
                     result = stmt.executeQuery(query);
-
-                    while(result.next()) {
-                        int id = result.getInt(1);
-                        query = "SELECT User.name FROM User WHERE User.userId = " + id;
-                        ResultSet result2 = stmt.executeQuery(query);
-                        result2.next();
-                        String user = result2.getString(1);
-
-                        out.print("<tr>");
-                        out.print("<td>" + id + "</td>");
-                        out.print("<td><a href=\"user_info.jsp?userId=" + id + "\">" + user + "</a></td>");
-                        out.print("</tr>");
+                    ArrayList<Integer> userIds = new ArrayList<Integer>();
+                    while (result.next()) {
+                        userIds.add(result.getInt(1));
                     }
+                    result.close();
+                    for(int id: userIds) {
+                        query = "SELECT User.name FROM User WHERE User.userId = " + id;
+                        result = stmt.executeQuery(query);
+                        if (result.next()) {
+                            String user = result.getString(1);
 
-                    con.close();
+                            out.print("<tr>");
+                            out.print("<td>" + id + "</td>");
+                            out.print("<td><a href=\"user_info.jsp?userId=" + id + "\">" + user + "</a></td>");
+                            out.print("</tr>");
+                        }
+                    }
+                    result.close();
                 } catch (Exception ex) {
                     if(con != null) {
                         con.close();
@@ -126,9 +132,15 @@
                     ex.printStackTrace();
                     out.print("<br>");
                     out.print("<br>");
-                    out.print("Failed to display Users.");
+                    out.print("Failed to display Representatives.");
                 }
             %>
         </table>
+
+        <br>
+
+        <form method="post" action="../admin_page.jsp">
+            <input type="submit" value="Back to Admin page" />
+        </form>
     </body>
 </html>
