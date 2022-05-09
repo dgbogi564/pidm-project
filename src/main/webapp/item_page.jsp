@@ -60,6 +60,7 @@
         sellerName = result.getString(2);
         auctionId = Integer.parseInt(request.getParameter("auctionId"));
         itemId = result.getInt(3);
+        session.setAttribute("itemId", itemId);
         description = result.getString(4);
         manufacturer = result.getString(5);
         color = result.getString(6);
