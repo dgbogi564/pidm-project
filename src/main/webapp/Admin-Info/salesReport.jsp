@@ -130,7 +130,7 @@
 						Statement stmt = con.createStatement();
 						ResultSet result;
 
-						//USE THIS ONCE BID IS SET UP!!
+						//Find expired auction details
  						String getAuctionTable2 = "SELECT a.highestBid, a.itemId, a.sellerId, " +
 						"c.name FROM Auction a, Clothes c WHERE a.itemId = c.itemId AND a.highestBid IS NOT NULL " +
 						"AND a.expiration < NOW()"; 
@@ -263,8 +263,42 @@
 				out.print("<p> Shoes and Pants tie for best earning!</p>");
 			} else if (totalShoes == totalShirt && totalShoes == totalPants) {
 				out.print("<p> All items are best earning!</p>");
-			} 
+			} 		
+		%>
+		
+		<h4>Best Bidders/Buyers ID: </h4>
+		<%
+			String bidderName ="";
+			int bidderID = 0;
+			try {
+				//Get the database connection
+				ApplicationDB db = new ApplicationDB();
+				con = db.getConnection();
+
+				//Create a SQL statement
+				Statement stmt = con.createStatement();
+				ResultSet result;
 				
+				String getHighestBidderId = "SELECT u.name, b.bidderId FROM Bid b, User u WHERE b.bidderId = u.userId AND b.amount = (SELECT max(amount) FROM Bid)";
+				result = stmt.executeQuery(getHighestBidderId);
+				
+				if(result.next()) {
+					bidderName = result.getString(1);
+					bidderID = result.getInt(2);
+					out.print("<p> NAME: " + bidderName + "</p>");
+					out.print("<p> ID: " + bidderID + "</p>");
+				}
+				
+				con.close();
+		
+			} catch (Exception ex) {
+				out.print(ex);
+				ex.printStackTrace();
+				out.print("<br>");
+				out.print("<br>");
+				out.print("Failed to display summary report.");
+				out.print("<form method=\"post\" action=\"../admin_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go Back\" />\n\t\t</form>");
+			}
 		%>
 			
 	<br>
