@@ -18,6 +18,13 @@
 		}
 	</style>	
 </head>
+
+		<!-- THIS PAGE IS REPLACED, INFO NOW IN AUCTION_PAGE -->
+		<!-- Useful info as reference if needed-->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->
+		<!-- ----------------------------------- -->
 	<body>
 		<h1> Search/Filter for Specific Auction </h1>
 		<table id="filterTable">
