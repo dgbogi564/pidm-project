@@ -47,10 +47,19 @@
             String GetBidderIds = "SELECT bidderId FROM Bid WHERE auctionId = " + auctionId;
             result = stmt.executeQuery(GetBidderIds);
             while(result.next()) {
-                ps = con.prepareStatement("INSERT INTO Alert(userId, alertId) VALUES(?, ?)");
-                ps.setInt(1, Integer.parseInt(result.getString("bidderId")));
-                ps.setInt(2,auctionId);
-                ps.executeUpdate();
+                int bidderId = Integer.parseInt(result.getString("bidderId"));
+                int auctItemID = Integer.parseInt(session.getAttribute("auctItemID"));
+
+                ps = con.prepareStatement("SELECT alertId FROM Alert WHERE Alert.userId = " + bidderId + " Alert.itemId = " + auctItemID);
+                ResultSet result2 = stmt.executeQuery(GetBidderIds);
+
+                if(!result2.next()) {
+                    ps = con.prepareStatement("INSERT INTO Alert(userId, alertId, itemId) VALUES(?, ?, ?)");
+                    ps.setInt(1, bidderId);
+                    ps.setInt(2, auctionId);
+                    ps.setInt(3, auctItemID);
+                    ps.executeUpdate();
+                }
             }
 
             ps = con.prepareStatement("INSERT INTO Bid (amount, time, anonymous, auctionId, bidderId) VALUES (?, ?, ?, ?, ?)");
