@@ -46,18 +46,27 @@
             // Alert other bidders
             String GetBidderIds = "SELECT bidderId FROM Bid WHERE auctionId = " + auctionId;
             result = stmt.executeQuery(GetBidderIds);
+            ArrayList<Integer> bidderIds = new ArrayList<Integer>();
             while(result.next()) {
+<<<<<<< HEAD
                 int bidderId = Integer.parseInt(result.getString("bidderId"));
                 int auctItemID = Integer.parseInt(session.getAttribute("auctItemID"));
+=======
+                bidderIds.add(result.getInt("bidderId"));
+            }
+>>>>>>> f494810987e466a98f5404860b7ce748dfd4a790
 
-                ps = con.prepareStatement("SELECT alertId FROM Alert WHERE Alert.userId = " + bidderId + " Alert.itemId = " + auctItemID);
+            for (int bidderId: bidderIds) {
+                int itemId = (Integer) session.getAttribute("itemId");
+
+                ps = con.prepareStatement("SELECT alertId FROM Alert WHERE Alert.userId = " + bidderId + " Alert.itemId = " + itemId);
                 ResultSet result2 = stmt.executeQuery(GetBidderIds);
 
                 if(!result2.next()) {
                     ps = con.prepareStatement("INSERT INTO Alert(userId, alertId, itemId) VALUES(?, ?, ?)");
                     ps.setInt(1, bidderId);
                     ps.setInt(2, auctionId);
-                    ps.setInt(3, auctItemID);
+                    ps.setInt(3, itemId);
                     ps.executeUpdate();
                 }
             }
