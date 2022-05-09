@@ -105,16 +105,20 @@
 		<table>
 			<thead>
 				<tr>
+					<th class="header">Auction ID</th>
 					<th class="header">Shirts</th>
 					<th class="header">Pants</th>
-					<th class="header">Shoes</th>	
-					<th class="header">Top Seller ID</th>
+					<th class="header">Shoes</th>
 				</tr>
 			</thead>
 			<tbody>
 			
 				<%
 					double highestBid = 0;
+					double totalShirt = 0;
+					double totalPants = 0;
+					double totalShoes = 0;
+					
 					try {
 						//Get the database connection
 						ApplicationDB db = new ApplicationDB();
@@ -165,11 +169,12 @@
 							if(clothesString == "Shirts") {
 								String typeShirts = "SELECT c.armLength, c.collarSize, c.waistSize FROM Shirts c, Auction a " +
 										"WHERE c.itemId = a.itemId AND a.itemId = '" + itemIds.get(i) + "'";
-								// Shirts
+								// Get Shirts info base on itemId
 		 						result = stmt.executeQuery(typeShirts);
 								if(result.next()) {
-									System.out.println("1");
+									totalShirt += highestBid;
 									out.print("<tr>");
+									out.print("<td>" + "</td>");
 									out.print("<td>" + currency.format(highestBid) + "</td>");
 									out.print("<td>" + "</td>");
 									out.print("<td>" + "</td>");
@@ -179,11 +184,12 @@
 							else if(clothesString == "Pants") {
 								String typePants = "SELECT p.width, p.length FROM Pants p, Auction a " +
 										"WHERE p.itemId = a.itemId AND a.itemId = '" + itemIds.get(i) + "'";
-								// Pants
+								// Get Pants info
 		 						result = stmt.executeQuery(typePants);
 								if(result.next()) {
-									System.out.println("2");
+									totalPants += highestBid;
 									out.print("<tr>");
+									out.print("<td>" + "</td>");
 									out.print("<td>" + "</td>");
 									out.print("<td>" + currency.format(highestBid) + "</td>");
 									out.print("<td>" + "</td>");
@@ -192,11 +198,12 @@
 							} else {
 								String typeShoes = "SELECT s.size FROM Shoes s, Auction a " +
 										"WHERE s.itemId = a.itemId AND a.itemId = '" + itemIds.get(i) + "'";
-								// Shoes
+								// Get Shoes info
 								result = stmt.executeQuery(typeShoes);
 								if(result.next()) {
-									System.out.println("3");
+									totalShoes += highestBid;
 									out.print("<tr>");
+									out.print("<td>" + "</td>");
 									out.print("<td>" + "</td>");
 									out.print("<td>" + "</td>");
 									out.print("<td>" + currency.format(highestBid) + "</td>");
@@ -216,6 +223,21 @@
 						out.print("<form method=\"post\" action=\"../admin_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go Back\" />\n\t\t</form>");
 					}
 				%>
+				<tr>
+					<td>TOTAL FOR EACH TYPE</td>
+					<td>
+						<!-- Total Earning Amount -->
+						<%out.print(currency.format(totalShirt));%>
+					</td>					
+					<td>
+						<!-- Total Earning Amount -->
+						<%out.print(currency.format(totalPants));%>
+					</td>
+					<td>
+						<!-- Total Earning Amount -->
+						<%out.print(currency.format(totalShoes));%>
+					</td>					
+				</tr>				
 			</tbody>			
 		</table>
 		
