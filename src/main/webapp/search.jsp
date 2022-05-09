@@ -36,8 +36,7 @@
 			/* Clothes Detail */
 			String color = request.getParameter("color");
 			String manufacturer = request.getParameter("manufacturer");
-			String keywords = request.getParameter("keywords");	
-			keywords.toLowerCase();
+			String keywords = request.getParameter("keywords").toLowerCase();
 			
 			/* Amount Limits */
 			float max = Float.parseFloat(request.getParameter("max"));	
