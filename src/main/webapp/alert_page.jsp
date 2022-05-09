@@ -194,7 +194,7 @@
 					" maxBid, clothesType FROM Alert WHERE userId = " + userId);
 			while (result.next()) {
 				// Create SQL query
-				String querySF = "SELECT a.auctionId, a.title FROM" +
+				String querySF = "SELECT DISTINCT a.auctionId, a.title FROM" +
 						" Auction a, User u, Clothes c";
 				String queryW = " WHERE a.sellerId = u.userId AND c.itemId = a.itemId AND a.expiration > NOW()";
 

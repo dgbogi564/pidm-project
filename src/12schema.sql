@@ -91,7 +91,6 @@ CREATE TABLE Bid
     anonymous bool     NOT NULL,
     auctionId integer  NOT NULL,
     bidderId  integer  NOT NULL,
-    upperLimit float   NOT NULL,
     PRIMARY KEY (amount, bidderId),
     FOREIGN KEY (bidderId) REFERENCES User (userId),
     FOREIGN KEY (auctionId) REFERENCES Auction (auctionId)

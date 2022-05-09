@@ -11,93 +11,93 @@
     <title>Make Bid</title>
 </head>
 <body>
-    <%
-        Connection con = null;
+<%
+    Connection con = null;
 
-        // Formatting
-        NumberFormat currency = NumberFormat.getCurrencyInstance();
-        SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
+    // Formatting
+    NumberFormat currency = NumberFormat.getCurrencyInstance();
+    SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
 
-        // Create variables
-        Float currentBid = Float.parseFloat(request.getParameter("bid"));
-        int auctionId = Integer.parseInt(request.getParameter("auctionId"));
-        long now = (new Date()).getTime();
-        boolean anonymous = false;
-        if (request.getParameter("anonymous") != null) anonymous = true;
+    // Create variables
+    Float currentBid = Float.parseFloat(request.getParameter("bid"));
+    int auctionId = Integer.parseInt(request.getParameter("auctionId"));
+    long now = (new Date()).getTime();
+    boolean anonymous = false;
+    if (request.getParameter("anonymous") != null) anonymous = true;
 
-        try {
-            // Get the database connection
-            ApplicationDB db = new ApplicationDB();
-            con = db.getConnection();
+    try {
+        // Get the database connection
+        ApplicationDB db = new ApplicationDB();
+        con = db.getConnection();
 
-            // Create a SQL statement
-            Statement stmt = con.createStatement();
-            ResultSet result;
+        // Create a SQL statement
+        Statement stmt = con.createStatement();
+        ResultSet result;
 
-            // Check for valid parameters
-            result = stmt.executeQuery("SELECT COUNT(*) FROM Auction WHERE auctionId = " + auctionId + " AND sellerId" +
-                    " = " + session.getAttribute("userId"));
-            result.next();
-            if (result.getInt(1) != 0) throw new Exception("Cannot bid in your own auction.");
+        // Check for valid parameters
+        result = stmt.executeQuery("SELECT COUNT(*) FROM Auction WHERE auctionId = " + auctionId + " AND sellerId" +
+                " = " + session.getAttribute("userId"));
+        result.next();
+        if (result.getInt(1) != 0) throw new Exception("Cannot bid in your own auction.");
 
-            con.setAutoCommit(false);
-            PreparedStatement ps;
+        con.setAutoCommit(false);
+        PreparedStatement ps;
 
-            // Alert other bidders
-            String GetBidderIds = "SELECT bidderId FROM Bid WHERE auctionId = " + auctionId;
-            result = stmt.executeQuery(GetBidderIds);
-            ArrayList<Integer> bidderIds = new ArrayList<Integer>();
-            while(result.next()) {
-                int bidderId = Integer.parseInt(result.getString("bidderId"));
-                bidderIds.add(result.getInt("bidderId"));
-            }
+        // Alert other bidders
+//        String GetBidderIds = "SELECT bidderId FROM Bid WHERE auctionId = " + auctionId;
+//        result = stmt.executeQuery(GetBidderIds);
+//        ArrayList<Integer> bidderIds = new ArrayList<Integer>();
+//        while(result.next()) {
+//            int bidderId = Integer.parseInt(result.getString("bidderId"));
+//            bidderIds.add(result.getInt("bidderId"));
+//        }
+//
+//        for (int bidderId: bidderIds) {
+//            int itemId = (Integer) session.getAttribute("itemId");
+//
+//            ps = con.prepareStatement("SELECT alertId FROM Alert WHERE Alert.userId = " + bidderId + " Alert.itemId = " + itemId);
+//            ResultSet result2 = stmt.executeQuery(GetBidderIds);
+//
+//            if(!result2.next()) {
+//                ps = con.prepareStatement("INSERT INTO Alert(userId, alertId, itemId) VALUES(?, ?, ?)");
+//                ps.setInt(1, bidderId);
+//                ps.setInt(2, auctionId);
+//                ps.setInt(3, itemId);
+//                ps.executeUpdate();
+//            }
+//        }
 
-            for (int bidderId: bidderIds) {
-                int itemId = (Integer) session.getAttribute("itemId");
+        ps = con.prepareStatement("INSERT INTO Bid (amount, time, anonymous, auctionId, bidderId) VALUES (?, ?, ?, ?, ?)");
+        ps.setFloat(1, currentBid);
+        ps.setTimestamp(2, new Timestamp(now));
+        ps.setBoolean(3, anonymous);
+        ps.setInt(4, auctionId);
+        ps.setInt(5, (Integer) session.getAttribute("userId"));
+        ps.executeUpdate();
 
-                ps = con.prepareStatement("SELECT alertId FROM Alert WHERE Alert.userId = " + bidderId + " Alert.itemId = " + itemId);
-                ResultSet result2 = stmt.executeQuery(GetBidderIds);
+        ps = con.prepareStatement("UPDATE Auction SET highestBid = ? WHERE auctionId = ?");
+        ps.setFloat(1, currentBid);
+        ps.setInt(2, auctionId);
+        ps.executeUpdate();
 
-                if(!result2.next()) {
-                    ps = con.prepareStatement("INSERT INTO Alert(userId, alertId, itemId) VALUES(?, ?, ?)");
-                    ps.setInt(1, bidderId);
-                    ps.setInt(2, auctionId);
-                    ps.setInt(3, itemId);
-                    ps.executeUpdate();
-                }
-            }
+        con.commit();
+        con.setAutoCommit(true);
 
-            ps = con.prepareStatement("INSERT INTO Bid (amount, time, anonymous, auctionId, bidderId) VALUES (?, ?, ?, ?, ?)");
-            ps.setFloat(1, currentBid);
-            ps.setTimestamp(2, new Timestamp(now));
-            ps.setBoolean(3, anonymous);
-            ps.setInt(4, auctionId);
-            ps.setInt(5, (Integer) session.getAttribute("userId"));
-            ps.executeUpdate();
-
-            ps = con.prepareStatement("UPDATE Auction SET highestBid = ? WHERE auctionId = ?");
-            ps.setFloat(1, currentBid);
-            ps.setInt(2, auctionId);
-            ps.executeUpdate();
-
-            con.commit();
-            con.setAutoCommit(true);
-
-            out.print("<p>Successfully made a bid of " + currency.format(currentBid) + " for Auction #"+ auctionId
-                    + " at " + date.format(now) + ".<p>");
-            out.print("<p>Bid was " + (anonymous ? "" : "not") + " made anonymously.");
-        } catch (Exception ex) {
-            out.print(ex);
-            ex.printStackTrace();
-            out.print("<br>");
-            out.print("<br>");
-            out.print("Failed to submit bid.");
-        }
-    %>
-    <br>
-    <form method="get" action="item_page.jsp">
-        <input type="hidden" name="auctionId" value=<%=auctionId%>>
-        <input type="submit" value="Return to Item Page">
-    </form>
+        out.print("<p>Successfully made a bid of " + currency.format(currentBid) + " for Auction #"+ auctionId
+                + " at " + date.format(now) + ".<p>");
+        out.print("<p>Bid was " + (anonymous ? "" : "not") + " made anonymously.");
+    } catch (Exception ex) {
+        out.print(ex);
+        ex.printStackTrace();
+        out.print("<br>");
+        out.print("<br>");
+        out.print("Failed to submit bid.");
+    }
+%>
+<br>
+<form method="get" action="item_page.jsp">
+    <input type="hidden" name="auctionId" value=<%=auctionId%>>
+    <input type="submit" value="Return to Item Page">
+</form>
 </body>
 </html>

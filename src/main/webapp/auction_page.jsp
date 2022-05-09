@@ -267,7 +267,7 @@
 			if (sellerName != null && !sellerName.equals("")) where += " AND u.name = '" + sellerName + "'";
 			if (descriptionKeywordsString != null && !descriptionKeywordsString.equals("")) {
 				for (int i = 0; i < descriptionKeywords.length; i++) {
-					where += " AND UPPER(a.title) LIKE UPPER('%" + descriptionKeywords[i] + "%')";
+					where += " AND UPPER(a.description) LIKE UPPER('%" + descriptionKeywords[i] + "%')";
 				}
 			}
 			if (minPrice > 0) where += " AND a.highestBid >= " + minPrice;
