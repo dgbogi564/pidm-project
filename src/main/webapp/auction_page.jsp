@@ -305,7 +305,7 @@
 
 			// For table
 			NumberFormat currency = NumberFormat.getCurrencyInstance();
-			date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+			date = new SimpleDateFormat("MMM d, yyyy HH:mm");
 			long now = (new java.util.Date()).getTime();
 
 			// Iterate through ResultSet and add to table

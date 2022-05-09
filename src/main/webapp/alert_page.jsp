@@ -83,7 +83,7 @@
 
 			// For table
 			NumberFormat currency = NumberFormat.getCurrencyInstance();
-			SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+			SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
 			long now = (new java.util.Date()).getTime();
 
 			while (result.next()) {

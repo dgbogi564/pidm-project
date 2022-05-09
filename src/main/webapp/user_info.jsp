@@ -81,7 +81,7 @@
 
             // For table
             NumberFormat currency = NumberFormat.getCurrencyInstance();
-            SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+            SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
             long now = (new java.util.Date()).getTime();
 
             // Iterate through ResultSet and add to table
@@ -133,7 +133,7 @@
 
             // Formatting
             NumberFormat currency = NumberFormat.getCurrencyInstance();
-            SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+            SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
 
             // Get bid history
             result = stmt.executeQuery("SELECT a.auctionId, a.title, b.amount, b.time, b.anonymous FROM Auction a, Bid b WHERE a.auctionId = b.auctionId AND b.bidderId = " + userId);

@@ -16,7 +16,7 @@
 
         // Formatting
         NumberFormat currency = NumberFormat.getCurrencyInstance();
-        SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+        SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
 
         // Create variables
         Float currentBid = Float.parseFloat(request.getParameter("bid"));
@@ -47,8 +47,8 @@
             String GetBidderIds = "SELECT bidderId FROM Bid WHERE auctionId = " + auctionId;
             result = stmt.executeQuery(GetBidderIds);
             while(result.next()) {
-                int bidderId = result.getInt("bidderId");
-                int auctItemID = (Integer) session.getAttribute("auctItemID");
+                int bidderId = Integer.parseInt(result.getString("bidderId"));
+                int auctItemID = Integer.parseInt(session.getAttribute("auctItemID"));
 
                 ps = con.prepareStatement("SELECT alertId FROM Alert WHERE Alert.userId = " + bidderId + " Alert.itemId = " + auctItemID);
                 ResultSet result2 = stmt.executeQuery(GetBidderIds);

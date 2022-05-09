@@ -53,7 +53,7 @@
 
         // Formatting
         NumberFormat currency = NumberFormat.getCurrencyInstance();
-        SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+        SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
 
         // Store to variables
         title = result.getString(1);
@@ -272,7 +272,7 @@
 
             // Formatting
             NumberFormat currency = NumberFormat.getCurrencyInstance();
-            SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+            SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
 
             // Get bid history
             result = stmt.executeQuery("SELECT b.anonymous, u.name, b.amount, b.time, b.bidderId FROM User u, Bid b WHERE u.userId = b.bidderId AND b.auctionId = " + auctionId);
@@ -323,7 +323,7 @@
 
             // Formatting
             NumberFormat currency = NumberFormat.getCurrencyInstance();
-            SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy hh:mm");
+            SimpleDateFormat date = new SimpleDateFormat("MMM d, yyyy HH:mm");
 
             // Get auction table
             String query = "SELECT DISTINCT a.auctionId, a.title, u.name, a.highestBid, a.expiration, a.sellerId FROM Auction a, " +

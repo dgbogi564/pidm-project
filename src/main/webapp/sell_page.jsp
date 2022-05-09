@@ -84,7 +84,7 @@
 					<td>Expiration Date & Time: </td>
 					<%
 						// Get current datetime
-						SimpleDateFormat date = new SimpleDateFormat("YYYY-MM-dd'T'hh:mm");
+						SimpleDateFormat date = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm");
 						String now = date.format((new Date()).getTime());
 					%>
 					<td><input type="datetime-local" name="expirDate" min=<%=now%> required></td>
