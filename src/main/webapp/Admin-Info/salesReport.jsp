@@ -24,7 +24,7 @@
 	<h1>Summary Sales Report</h1>
 	
 	<h3>Total Earnings</h3>
-	<p> Total Earnings Report are calculated from the Highest Bid placed from all auction that are over. <p>
+	<p> Total Earnings Report are calculated from the Highest Bid placed from all auction that are over. If bid/price is $0.00, auction had no bids.<p>
 	<!-- Calculate total from Auction's Highest Bid that ended Base on Date(Month or Day)-->
 	<table>
 		<thead>
@@ -105,7 +105,7 @@
 		<table>
 			<thead>
 				<tr>
-					<th class="header">Auction ID</th>
+					<th class="header">Seller ID</th>
 					<th class="header">Shirts</th>
 					<th class="header">Pants</th>
 					<th class="header">Shoes</th>
@@ -114,10 +114,12 @@
 			<tbody>
 			
 				<%
+					//to be used in table
 					double highestBid = 0;
 					double totalShirt = 0;
 					double totalPants = 0;
 					double totalShoes = 0;
+					int sellerId;
 					
 					try {
 						//Get the database connection
@@ -133,17 +135,22 @@
 						"c.name FROM Auction a, Clothes c WHERE a.itemId = c.itemId AND a.highestBid IS NOT NULL " +
 						"AND a.expiration < NOW()"; 
 
-						//Arraylist to store the itemIds
+						//Arraylist to store the itemIds, sellerIds, and highestBids
 						ArrayList <Integer> itemIds = new ArrayList <Integer>();
+						ArrayList <Integer> sellerIds = new ArrayList <Integer>();
+						ArrayList <Double> highestBids = new ArrayList <Double>();
+						
 						result = stmt.executeQuery(getAuctionTable2);
 						
 						// Iterate through ResultSet and add to table
 						while (result.next()) {
 							highestBid = result.getFloat(1);
 							int itemId = result.getInt(2);
-							int sellerId = result.getInt(3);
+							sellerId = result.getInt(3);
 							String itemName = result.getString(4);
 							itemIds.add(itemId);
+							sellerIds.add(sellerId);
+							highestBids.add(highestBid);
 						}
 
 						// Get the specific type of clothing
@@ -172,10 +179,10 @@
 								// Get Shirts info base on itemId
 		 						result = stmt.executeQuery(typeShirts);
 								if(result.next()) {
-									totalShirt += highestBid;
+									totalShirt += highestBids.get(i);
 									out.print("<tr>");
-									out.print("<td>" + "</td>");
-									out.print("<td>" + currency.format(highestBid) + "</td>");
+									out.print("<td>" + sellerIds.get(i) + "</td>");
+									out.print("<td>" + currency.format(highestBids.get(i)) + "</td>");
 									out.print("<td>" + "</td>");
 									out.print("<td>" + "</td>");
 									out.print("</tr>");
@@ -187,11 +194,11 @@
 								// Get Pants info
 		 						result = stmt.executeQuery(typePants);
 								if(result.next()) {
-									totalPants += highestBid;
+									totalPants += highestBids.get(i);
 									out.print("<tr>");
+									out.print("<td>" + sellerIds.get(i) + "</td>");
 									out.print("<td>" + "</td>");
-									out.print("<td>" + "</td>");
-									out.print("<td>" + currency.format(highestBid) + "</td>");
+									out.print("<td>" + currency.format(highestBids.get(i)) + "</td>");
 									out.print("<td>" + "</td>");
 									out.print("</tr>");
 								} 
@@ -201,12 +208,12 @@
 								// Get Shoes info
 								result = stmt.executeQuery(typeShoes);
 								if(result.next()) {
-									totalShoes += highestBid;
+									totalShoes += highestBids.get(i);
 									out.print("<tr>");
+									out.print("<td>" + sellerIds.get(i) + "</td>");
 									out.print("<td>" + "</td>");
 									out.print("<td>" + "</td>");
-									out.print("<td>" + "</td>");
-									out.print("<td>" + currency.format(highestBid) + "</td>");
+									out.print("<td>" + currency.format(highestBids.get(i)) + "</td>");
 									out.print("</tr>");
 								} 
 							}
@@ -240,7 +247,26 @@
 				</tr>				
 			</tbody>			
 		</table>
-		
+		<h4>Best selling item: </h4>
+		<%
+			if(totalShirt > totalPants && totalShirt > totalShoes) {
+				out.print("<p> Shirts are the best selling with total earnings: " + currency.format(totalShirt) + "</p>");
+			} else if (totalPants > totalShirt && totalPants > totalShoes) {
+				out.print("<p> Pants are the best selling with total earnings: " + currency.format(totalPants) + "</p>");
+			} else if (totalShoes > totalShirt && totalShoes > totalPants) {
+				out.print("<p> Shoes are the best selling with total earnings: " + currency.format(totalShoes) + "</p>");
+			} else if (totalShirt == totalPants && totalShirt > totalShoes) {
+				out.print("<p> Shirts and Pants tie for best earning!</p>");
+			} else if (totalShirt > totalPants && totalShirt == totalShoes) {
+				out.print("<p> Shirts and Shoes tie for best earning!</p>");
+			} else if (totalShoes == totalPants && totalShoes > totalShirt) {
+				out.print("<p> Shoes and Pants tie for best earning!</p>");
+			} else if (totalShoes == totalShirt && totalShoes == totalPants) {
+				out.print("<p> All items are best earning!</p>");
+			} 
+				
+		%>
+			
 	<br>
 	<br>
 	<form method="post" action="../admin_page.jsp">
