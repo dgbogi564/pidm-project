@@ -41,8 +41,19 @@
             if (result.getInt(1) != 0) throw new Exception("Cannot bid in your own auction.");
 
             con.setAutoCommit(false);
+            PreparedStatement ps;
 
-            PreparedStatement ps = con.prepareStatement("INSERT INTO Bid (amount, time, anonymous, auctionId, bidderId) VALUES (?, ?, ?, ?, ?)");
+            // Alert other bidders
+            String GetBidderIds = "SELECT bidderId FROM Bid WHERE auctionId = " + auctionId;
+            result = stmt.executeQuery(GetBidderIds);
+            while(result.next()) {
+                ps = con.prepareStatement("INSERT INTO Alert(userId, alertId) VALUES(?, ?)");
+                ps.setInt(1, Integer.parseInt(result.getString("bidderId")));
+                ps.setInt(2,auctionId);
+                ps.executeUpdate();
+            }
+
+            ps = con.prepareStatement("INSERT INTO Bid (amount, time, anonymous, auctionId, bidderId) VALUES (?, ?, ?, ?, ?)");
             ps.setFloat(1, currentBid);
             ps.setTimestamp(2, new Timestamp(now));
             ps.setBoolean(3, anonymous);
