@@ -252,10 +252,10 @@
 					ResultSet result;
 
 					// Create barebones SQL string
-					String getAuctionTable = "SELECT DISTINCT a.auctionId, a.title, u.name, a.highestBid, a.expiration FROM Auction a, User u, Shirts, Shoes, Pants WHERE a.sellerId = u.userId";
+					String getAuctionTable = "SELECT DISTINCT a.auctionId, a.title, u.name, a.highestBid, a.expiration, a.sellerId " +
+							"FROM Auction a, User u, Shirts, Shoes, Pants WHERE a.sellerId = u.userId";
 
 					// Apply filter and sort conditions
-					System.out.println(getAuctionTable);
 					if (auctionStatus != null && auctionStatus.equals("open")) getAuctionTable += " AND a.expiration > NOW()";
 					else if (auctionStatus != null && auctionStatus.equals("closed")) getAuctionTable += " AND a.expiration <= NOW()";
 					if (titleKeywordsString != null && !titleKeywordsString.equals("")) {
@@ -263,7 +263,6 @@
 							getAuctionTable += " AND a.title LIKE '%" + titleKeywords[i] + "%'";
 						}
 					}
-					System.out.println(getAuctionTable);
 					if (sellerName != null && !sellerName.equals("")) getAuctionTable += " AND u.name = '" + sellerName + "'";
 					if (descriptionKeywordsString != null && !descriptionKeywordsString.equals("")) {
 						for (int i = 0; i < descriptionKeywords.length; i++) {
@@ -272,7 +271,6 @@
 					}
 					if (minPrice > 0) getAuctionTable += " AND a.highestBid >= " + minPrice;
 					if (maxPrice > 0) getAuctionTable += " AND a.highestBid <= " + maxPrice;
-					System.out.println(getAuctionTable);
 					if (clothesType != null && clothesType.equals("shirts")) {
 						getAuctionTable += " AND a.itemId IN (SELECT itemId FROM Shirts)";
 						if (minArm > 0) getAuctionTable += " AND a.itemId = Shirts.itemId AND Shirts.armLength >= " + minArm;
@@ -292,14 +290,14 @@
 						if (minSize > 0) getAuctionTable += " AND a.itemId = Shoes.itemId AND Shoes.width >= " + minSize;
 						if (maxSize > 0) getAuctionTable += " AND a.itemId = Shoes.itemId AND Shoes.width <= " + maxSize;
 					}
-					System.out.println(getAuctionTable);
 					if (sortType == null || sortType.equals("timeCreated")) getAuctionTable += " ORDER BY a.auctionId";
 					else if (sortType.equals("title")) getAuctionTable += " ORDER BY a.title";
 					else if (sortType.equals("seller")) getAuctionTable += " ORDER BY u.name";
-					else if (sortType.equals("price")) getAuctionTable += " ORDER BY a.highestPrice";
+					else if (sortType.equals("price")) getAuctionTable += " ORDER BY a.highestBid";
 					else if (sortType.equals("expiration")) getAuctionTable += " ORDER BY a.expiration";
 					if (sortOrder == null || sortOrder.equals("ascending")) getAuctionTable += " ASC";
 					else getAuctionTable += " DESC";
+
 					result = stmt.executeQuery(getAuctionTable);
 
 					// For table
@@ -318,11 +316,12 @@
 						diffHours = (diffHours - (diffHours % 3600000)) / 3600000;
 						long diffDays = diffHours / 24;
 						diffHours = diffHours % 24;
+						int sellerId = result.getInt(6);
 
 						out.print("<tr>");
 						out.print("<td style=\"text-align:center\">" + auctionId + "</td>");
 						out.print("<td style=\"text-align:center\"><a href=\"item_page.jsp?auctionId=" + auctionId + "\">" + title + "</a></td>"); // could just make this an html link
-						out.print("<td style=\"text-align:center\">" + seller + "</td>");
+						out.print("<td style=\"text-align:center\"><a href=\"user_info.jsp?userId=" + sellerId + "\">" + seller + "</a></td>");
 						out.print("<td style=\"text-align:center\">" + currency.format(currentPrice) + "</td>");
 						out.print("<td style=\"text-align:center\">" + ((expiration - now) < 0 ? "Closed" : (diffDays + "d " + diffHours + "h")) + "</td>");
 						out.print("<td style=\"text-align:center\">" + date.format(expiration) + "</td>");
@@ -338,32 +337,5 @@
 				}
 			%>
 		</table>
-		<!-- IMPORTANT: "can't access javascript variables in JSP. But you can store needed
-		data in hidden fields, set its value in client and get it on server over GET or POST."  -->
-		<!-- <input id=hiddenField type="hidden" name="hiddenData" value="" /> -->
-
-		<input type="hidden" id="hiddenField" name="dataStored" value="">
-		<button type="hidden" id="autoClick" value="Login" style="display: none;"></button>
-		</form>
-
-	    <script>
-			function myFunction(selectRow) {
-			let table = document.getElementById("auctionBidder");
-			/* column with itemId */
-			let columnId = selectRow.cells[1].innerHTML;
-
-			    /* https://stackoverflow.com/questions/3116058/how-can-i-access-javascript-variables-in-jsp#:~:text=JavaScript%20variable%20is%20on%20client,server%20over%20GET%20or%20POST. */
-				var getID = document.getElementById("hiddenField");
-			    getID.value = columnId;
-
-			    /* ERROR: this is not redirect page with hidden value.... */
-			    /* window.location.assign('bid_page.jsp'); */
-			    /* window.location.href = 'bid_page.jsp'; */
-
-			    /* a button that is click automatically(using javascript) */
-			    document.getElementById("autoClick").click();
-		    }
-	   	</script>
-	   	<!-- Reference: solution4 https://localcoder.org/how-to-pass-a-value-from-one-jsp-to-another-jsp-page#:~:text=Can%20be%20done%20in%20three,getAttribute(%22send%22)%3B -->
 	</body>
 </html>
