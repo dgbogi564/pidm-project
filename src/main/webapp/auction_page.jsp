@@ -56,7 +56,7 @@
 <form method="get" action="auction_page.jsp">
 	<%
 		// Formatting
-		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
 		// Get filter values
 		String auctionStatus = request.getParameter("auctionStatus");

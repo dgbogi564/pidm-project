@@ -44,7 +44,7 @@
 			String description = request.getParameter("description");	
 			
 			//Database accepts only java.sql.Date. So we need to convert java.util.Date into java.sql.Date.
- 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm");
+ 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
  			java.util.Date endDate = format.parse(request.getParameter("expirDate"));
 /* 			java.sql.Date sql_EndDate = new java.sql.Date( endDate.getTime() );  */
 			java.sql.Timestamp sql_EndTime = new java.sql.Timestamp( endDate.getTime() ); 
