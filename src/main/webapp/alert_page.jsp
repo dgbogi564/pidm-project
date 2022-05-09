@@ -32,81 +32,10 @@
 			}
 		%>
 
-		<h1>Alerts: </h1>
-<%--		<fieldset>--%>
-			<table>
-				<tr>
-					<th>Item ID</th>
-					<th>Title</th>
-					<th>Type of Clothes</th>
-					<th>Color</th>
-					<th>Condition</th>
-					<th>Manufacturer</th>
-					<th>Highest Bid</th>
-				<tr>
-				<%
-					Connection con = null;
-					try {
-						//Get the database connection
-						ApplicationDB db = new ApplicationDB();
-						con = db.getConnection();
-
-						//Create a SQL statement
-						Statement stmt = con.createStatement();
-						ResultSet result;
-
-						String getAuctionTable = "SELECT a.itemId, a.title, c.color, c.manufacturer, a.highestBid FROM Auction a, Clothes c, Alert WHERE a.itemId = c.itemId AND Alert.userId = " + userId;
-						result = stmt.executeQuery(getAuctionTable);
-
-						ResultSet clothesType;
-						String clothesString;
-
-						// Iterate through ResultSet and add to table
-						while (result.next()) {
-							int id = result.getInt(1);
-							String title = result.getString(2);
-							String color = result.getString(3);
-							String manufacturer = result.getString(4);
-							double highestBid = result.getFloat(5);
-
-							out.print("<tr>");
-							out.print("<td>" + id + "</td>"); // could just make this an html link
-							out.print("<td>" + title + "</td>");
-
-
-							clothesType = stmt.executeQuery("SELECT COUNT(*) FROM Shirts WHERE itemId = " + id);
-							clothesType.next();
-							if (result.getInt(1) != 0) clothesString = "Shirts";
-							else {
-								clothesType = stmt.executeQuery("SELECT COUNT(*) FROM Pants WHERE itemId = " + id);
-								clothesType.first();
-								if (result.getInt(1) != 0) clothesString = "Pants";
-								else clothesString = "Shoes";
-							}
-							out.print("<td>" + clothesString + "<td>");
-
-							out.print("<td>" + color + "</td>");
-							out.print("<td>" + manufacturer + "</td>");
-							out.print("<td>" + (highestBid == 0 ? "None" : highestBid) + "</td>");
-							out.print("<td>" + "</td>"); // IMPLEMENT SEE INFO HERE
-							out.print("</tr>");
-						}
-					} catch (Exception ex) {
-						out.print(ex);
-						ex.printStackTrace();
-						out.print("<br>");
-						out.print("<br>");
-						out.print("Failed to display alerts.");
-						out.print("<form method=\"post\" action=\"profile_page.jsp\">\n\t\t\t<input type=\"submit\" value=\"Go back to profile page\" />\n\t\t</form>");
-					}
-				%>
-			</table>
-<%--		</fieldset>--%>
-		
-		
-		<br><br><br>
-		<hr>
 		<h1> Create an Alert: </h1>
+
+		<hr>
+
 		<form method="post" action="alert.jsp">
 			<!-- Type of clothing -->
 			<h3> Set Clothes Type: </h3>
