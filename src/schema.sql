@@ -106,13 +106,27 @@ CREATE TABLE Participates
     FOREIGN KEY (auctionId) REFERENCES Auction (auctionId)
 );
 
-CREATE TABLE Alert
+CREATE TABLE AuctionAlert
 (
-    userId integer NOT NULL,
-    itemId integer NOT NULL,
-    PRIMARY KEY (userId, itemId),
+    titleKeywords		varchar(256),
+	descriptionKeywords	varchar(256),
+	color				varchar(128),
+	manufacturer		varchar(128),
+	minBid				float,
+	maxBid				float,
+	alertId				integer			NOT NULL,
+	userId				integer			NOT NULL,
+	PRIMARY KEY (userId, alertId),
+	FOREIGN KEY (userId) REFERENCES User (userId)
+);
+
+CREATE TABLE BidAlert
+(
+	userId integer NOT NULL,
+    auctionId integer NOT NULL,
+    PRIMARY KEY (userId, auctionId),
     FOREIGN KEY (userId) REFERENCES User (userId),
-    FOREIGN KEY (itemId) REFERENCES Clothes (itemId)
+    FOREIGN KEY (auctionId) REFERENCES Auction (auctionId)
 );
 
 INSERT INTO User(name, password, userId)
