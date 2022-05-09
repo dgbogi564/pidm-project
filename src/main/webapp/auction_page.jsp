@@ -252,44 +252,74 @@
 					ResultSet result;
 
 					// Create barebones SQL string
+<<<<<<< HEAD
 					String getAuctionTable = "SELECT DISTINCT a.auctionId, a.title, u.name, a.highestBid, a.expiration, a.sellerId " +
 							"FROM Auction a, User u, Shirts, Shoes, Pants WHERE a.sellerId = u.userId";
 
 					// Apply filter and sort conditions
 					if (auctionStatus != null && auctionStatus.equals("open")) getAuctionTable += " AND a.expiration > NOW()";
 					else if (auctionStatus != null && auctionStatus.equals("closed")) getAuctionTable += " AND a.expiration <= NOW()";
+=======
+					String select = "SELECT DISTINCT a.auctionId, a.title, u.name, a.highestBid, a.expiration";
+					String from = " FROM Auction a, User u";
+					String where = " WHERE a.sellerId = u.userId";
+
+					// Apply filter and sort conditions
+					String getAuctionTable = select + from + where;
+					System.out.println(getAuctionTable);
+					if (auctionStatus != null && auctionStatus.equals("open")) where += " AND a.expiration > NOW()";
+					else if (auctionStatus != null && auctionStatus.equals("closed")) where += " AND a.expiration <= NOW()";
+>>>>>>> 165157beadb4286c975b2ad08ee429bf8b5f4fea
 					if (titleKeywordsString != null && !titleKeywordsString.equals("")) {
 						for (int i = 0; i < titleKeywords.length; i++) {
-							getAuctionTable += " AND a.title LIKE '%" + titleKeywords[i] + "%'";
+							where += " AND a.title LIKE '%" + titleKeywords[i] + "%'";
 						}
 					}
+<<<<<<< HEAD
 					if (sellerName != null && !sellerName.equals("")) getAuctionTable += " AND u.name = '" + sellerName + "'";
+=======
+
+					getAuctionTable = select + from + where;
+					System.out.println(getAuctionTable);
+					if (sellerName != null && !sellerName.equals("")) where += " AND u.name = '" + sellerName + "'";
+>>>>>>> 165157beadb4286c975b2ad08ee429bf8b5f4fea
 					if (descriptionKeywordsString != null && !descriptionKeywordsString.equals("")) {
 						for (int i = 0; i < descriptionKeywords.length; i++) {
-							getAuctionTable += " AND a.title LIKE '%" + descriptionKeywords[i] + "%'";
+							where += " AND a.title LIKE '%" + descriptionKeywords[i] + "%'";
 						}
 					}
+<<<<<<< HEAD
 					if (minPrice > 0) getAuctionTable += " AND a.highestBid >= " + minPrice;
 					if (maxPrice > 0) getAuctionTable += " AND a.highestBid <= " + maxPrice;
+=======
+					if (minPrice > 0) where += " AND a.highestBid >= " + minPrice;
+					if (maxPrice > 0) where += " AND a.highestBid <= " + maxPrice;
+					getAuctionTable = select + from + where;
+					System.out.println(getAuctionTable);
+>>>>>>> 165157beadb4286c975b2ad08ee429bf8b5f4fea
 					if (clothesType != null && clothesType.equals("shirts")) {
-						getAuctionTable += " AND a.itemId IN (SELECT itemId FROM Shirts)";
-						if (minArm > 0) getAuctionTable += " AND a.itemId = Shirts.itemId AND Shirts.armLength >= " + minArm;
-						if (maxArm > 0) getAuctionTable += " AND a.itemId = Shirts.itemId AND Shirts.armLength <= " + maxArm;
-						if (minCollar > 0) getAuctionTable += " AND a.itemId = Shirts.itemId AND Shirts.collarSize >= " + minCollar;
-						if (maxCollar > 0) getAuctionTable += " AND a.itemId = Shirts.itemId AND Shirts.collarSize <= " + maxCollar;
-						if (minWaist > 0) getAuctionTable += " AND a.itemId = Shirts.itemId AND Shirts.waistSize >= " + minWaist;
-						if (maxWaist > 0) getAuctionTable += " AND a.itemId = Shirts.itemId AND Shirts.waistSize <= " + maxWaist;
+						from += ", Shirts";
+						where += " AND a.itemId IN (SELECT itemId FROM Shirts)";
+						if (minArm > 0) where += " AND a.itemId = Shirts.itemId AND Shirts.armLength >= " + minArm;
+						if (maxArm > 0) where += " AND a.itemId = Shirts.itemId AND Shirts.armLength <= " + maxArm;
+						if (minCollar > 0) where += " AND a.itemId = Shirts.itemId AND Shirts.collarSize >= " + minCollar;
+						if (maxCollar > 0) where += " AND a.itemId = Shirts.itemId AND Shirts.collarSize <= " + maxCollar;
+						if (minWaist > 0) where += " AND a.itemId = Shirts.itemId AND Shirts.waistSize >= " + minWaist;
+						if (maxWaist > 0) where += " AND a.itemId = Shirts.itemId AND Shirts.waistSize <= " + maxWaist;
 					} else if (clothesType != null && clothesType.equals("pants")) {
-						getAuctionTable += " AND a.itemId IN (SELECT itemId FROM Pants)";
-						if (minWidth > 0) getAuctionTable += " AND a.itemId = Pants.itemId AND Pants.width >= " + minWidth;
-						if (maxWidth > 0) getAuctionTable += " AND a.itemId = Pants.itemId AND Pants.width <= " + maxWidth;
-						if (minLength > 0) getAuctionTable += " AND a.itemId = Pants.itemId AND Pants.length >= " + minLength;
-						if (maxLength > 0) getAuctionTable += " AND a.itemId = Pants.itemId AND Pants.length <= " + maxLength;
+						from += ", Pants";
+						where += " AND a.itemId IN (SELECT itemId FROM Pants)";
+						if (minWidth > 0) where += " AND a.itemId = Pants.itemId AND Pants.width >= " + minWidth;
+						if (maxWidth > 0) where += " AND a.itemId = Pants.itemId AND Pants.width <= " + maxWidth;
+						if (minLength > 0) where += " AND a.itemId = Pants.itemId AND Pants.length >= " + minLength;
+						if (maxLength > 0) where += " AND a.itemId = Pants.itemId AND Pants.length <= " + maxLength;
 					} else if (clothesType != null && clothesType.equals("shoes")) {
-						getAuctionTable += " AND a.itemId IN (SELECT itemId FROM Shoes)";
-						if (minSize > 0) getAuctionTable += " AND a.itemId = Shoes.itemId AND Shoes.width >= " + minSize;
-						if (maxSize > 0) getAuctionTable += " AND a.itemId = Shoes.itemId AND Shoes.width <= " + maxSize;
+						from += ", Shoes";
+						where += " AND a.itemId IN (SELECT itemId FROM Shoes)";
+						if (minSize > 0) where += " AND a.itemId = Shoes.itemId AND Shoes.width >= " + minSize;
+						if (maxSize > 0) where += " AND a.itemId = Shoes.itemId AND Shoes.width <= " + maxSize;
 					}
+<<<<<<< HEAD
 					if (sortType == null || sortType.equals("timeCreated")) getAuctionTable += " ORDER BY a.auctionId";
 					else if (sortType.equals("title")) getAuctionTable += " ORDER BY a.title";
 					else if (sortType.equals("seller")) getAuctionTable += " ORDER BY u.name";
@@ -298,6 +328,18 @@
 					if (sortOrder == null || sortOrder.equals("ascending")) getAuctionTable += " ASC";
 					else getAuctionTable += " DESC";
 
+=======
+					getAuctionTable = select + from + where;
+					System.out.println(getAuctionTable);
+					if (sortType == null || sortType.equals("timeCreated")) where += " ORDER BY a.auctionId";
+					else if (sortType.equals("title")) where += " ORDER BY a.title";
+					else if (sortType.equals("seller")) where += " ORDER BY u.name";
+					else if (sortType.equals("price")) where += " ORDER BY a.highestPrice";
+					else if (sortType.equals("expiration")) where += " ORDER BY a.expiration";
+					if (sortOrder == null || sortOrder.equals("ascending")) where += " ASC";
+					else where += " DESC";
+					getAuctionTable = select + from + where;
+>>>>>>> 165157beadb4286c975b2ad08ee429bf8b5f4fea
 					result = stmt.executeQuery(getAuctionTable);
 
 					// For table
